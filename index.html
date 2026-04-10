@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safety as a System Property — IFAC World Congress 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..500;9..600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Custom Properties ─────────────────────────────────── */
+    :root {
+      --bg-void:     #F2F5FA;
+      --bg-base:     #FFFFFF;
+      --bg-surface:  #EBF0F8;
+      --bg-elevated: #DDE5F2;
+      --bg-card:     #FFFFFF;
+      --gold:        #1A5FA8;
+      --gold-light:  #2B7DD4;
+      --gold-dim:    rgba(26, 95, 168, 0.09);
+      --gold-glow:   rgba(26, 95, 168, 0.05);
+      --orange:      #C04010;
+      --teal:        #0E7490;
+      --text-hi:     #0A1628;
+      --text-md:     #2E4268;
+      --text-lo:     #6B82A8;
+      --border:      rgba(26, 95, 168, 0.13);
+      --border-hi:   rgba(26, 95, 168, 0.28);
+      --font-disp:   'Cormorant Garant', Georgia, serif;
+      --font-body:   'DM Sans', system-ui, sans-serif;
+      --font-mono:   'DM Mono', 'Fira Mono', monospace;
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* ─── Reset & Base ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-void);
+      color: var(--text-hi);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ─── Grain Overlay ─────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.018;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* ─── Navigation ────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 900;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 18, 40, 0.88);
+      backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid rgba(43,125,212,0.15);
+      transition: background 0.3s;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .nav-brand-text {
+      font-family: var(--font-disp);
+      font-weight: 500;
+      font-size: 1.05rem;
+      color: #E8EEF8;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+      transition: color 0.3s;
+    }
+    nav.scrolled .nav-brand-text { color: var(--text-hi); }
+    .nav-brand-text span {
+      display: block;
+      font-size: 0.65rem;
+      font-family: var(--font-body);
+      font-weight: 400;
+      color: #7AAEE8;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    nav.scrolled .nav-brand-text span { color: var(--gold); }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #8AAAD4;
+      transition: color 0.2s;
+    }
+    nav.scrolled .nav-links a { color: var(--text-md); }
+    .nav-links a:hover { color: #C8DDF8; }
+    nav.scrolled .nav-links a:hover { color: var(--gold); }
+    nav {
+      transition: background 0.35s, border-color 0.35s;
+    }
+    nav.scrolled {
+      background: rgba(242, 245, 250, 0.96);
+      border-bottom-color: var(--border);
+    }
+    .nav-cta {
+      padding: 0.45rem 1.1rem;
+      background: rgba(43, 125, 212, 0.20);
+      border: 1px solid rgba(43, 125, 212, 0.35);
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #9AC5F0;
+      transition: background 0.2s, border-color 0.2s, color 0.3s;
+    }
+    nav.scrolled .nav-cta {
+      background: var(--gold-dim);
+      border-color: var(--border-hi);
+      color: var(--gold);
+    }
+    .nav-cta:hover {
+      background: rgba(43, 125, 212, 0.32);
+      border-color: #2B7DD4;
+    }
+
+    /* ─── Hero ──────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 0 clamp(1.5rem, 8vw, 8rem);
+      background: #0A1628;
+    }
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.55;
+    }
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 65% 35%, rgba(43, 125, 212, 0.12) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 80% at 10% 60%, rgba(14, 116, 144, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 100% 100% at 50% 100%, rgba(10, 22, 40, 0.75) 0%, transparent 50%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      padding-top: 80px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.35rem 0.9rem 0.35rem 0.5rem;
+      background: rgba(43, 125, 212, 0.15);
+      border: 1px solid rgba(43, 125, 212, 0.32);
+      border-radius: 100px;
+      margin-bottom: 2.2rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.7s var(--ease-out) 0.2s forwards;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--gold);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(43,125,212,0.7); opacity: 1; }
+      50% { box-shadow: 0 0 14px rgba(100,170,240,0.5); opacity: 0.7; }
+    }
+    .hero-badge-text {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #7AAEE8;
+    }
+    h1.hero-title {
+      font-family: var(--font-disp);
+      font-weight: 300;
+      font-size: clamp(3rem, 7vw, 5.8rem);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: #E8EEF8;
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.9s var(--ease-out) 0.35s forwards;
+    }
+    h1.hero-title em {
+      font-style: italic;
+      color: #7AAEE8;
+    }
+    .hero-subtitle {
+      font-family: var(--font-disp);
+      font-weight: 400;
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      color: #8AAAD4;
+      letter-spacing: 0.01em;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.9s var(--ease-out) 0.5s forwards;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem 2.5rem;
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fadeUp 0.9s var(--ease-out) 0.65s forwards;
+    }
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .hero-meta-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7AAEE8;
+    }
+    .hero-meta-value {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: #E8EEF8;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.9s var(--ease-out) 0.8s forwards;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      background: var(--gold);
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      transition: background 0.2s, transform 0.2s var(--ease-spring), box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(26, 95, 168, 0.35);
+    }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      background: transparent;
+      color: #8AAAD4;
+      font-weight: 500;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid rgba(43, 125, 212, 0.30);
+      border-radius: 4px;
+      transition: color 0.2s, border-color 0.2s, transform 0.2s var(--ease-spring);
+    }
+    .btn-secondary:hover {
+      color: #E8EEF8;
+      border-color: rgba(43, 125, 212, 0.58);
+      transform: translateY(-2px);
+    }
+    .hero-ifac-logo {
+      position: absolute;
+      bottom: 3rem;
+      right: clamp(1.5rem, 8vw, 8rem);
+      opacity: 0;
+      animation: fadeUp 0.9s var(--ease-out) 1.0s forwards;
+    }
+    .hero-ifac-logo img {
+      height: 70px;
+      width: auto;
+      filter: drop-shadow(0 4px 16px rgba(43, 125, 212, 0.25));
+    }
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.2s forwards;
+    }
+    .hero-scroll-hint span {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #5A7AA8;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollAnim 2s ease-in-out infinite;
+    }
+    @keyframes scrollAnim {
+      0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      51% { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+      100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* ─── Section Shared ────────────────────────────────────── */
+    section {
+      padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 8vw, 8rem);
+    }
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: var(--font-disp);
+      font-weight: 400;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--text-hi);
+      margin-bottom: 1.5rem;
+    }
+    .section-divider {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      margin-bottom: 3rem;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ─── About ─────────────────────────────────────────────── */
+    #about {
+      background: var(--bg-base);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .about-body {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .about-body p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text-md);
+      margin-bottom: 1.25rem;
+    }
+    .about-body p strong {
+      color: var(--text-hi);
+      font-weight: 500;
+    }
+    .about-body p:last-child { margin-bottom: 0; }
+
+    /* ─── Topics ────────────────────────────────────────────── */
+    #topics {
+      background: var(--bg-void);
+    }
+    .topics-header {
+      max-width: 820px;
+      margin: 0 auto 2.5rem;
+    }
+    .topics-list {
+      max-width: 820px;
+      margin: 0 auto;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .topics-list li {
+      padding: 1rem 1.5rem;
+      font-size: 0.93rem;
+      color: var(--text-md);
+      line-height: 1.6;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-surface);
+      display: flex;
+      align-items: baseline;
+      gap: 0.9rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .topics-list li:last-child { border-bottom: none; }
+    .topics-list li:hover { background: var(--bg-elevated); color: var(--text-hi); }
+    .topics-list li::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+      margin-top: 0.4em;
+    }
+
+    /* ─── Schedule ──────────────────────────────────────────── */
+    #schedule {
+      background: var(--bg-base);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .schedule-header {
+      max-width: 900px;
+      margin: 0 auto 4rem;
+    }
+    .schedule-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .schedule-wrapper::before {
+      content: '';
+      position: absolute;
+      left: 88px;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
+    }
+    .schedule-row {
+      display: flex;
+      gap: 0;
+      margin-bottom: 0;
+      position: relative;
+    }
+    .schedule-row + .schedule-row { margin-top: 0; }
+    .sched-time {
+      min-width: 88px;
+      padding: 1.6rem 1.5rem 1.6rem 0;
+      text-align: right;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-lo);
+      line-height: 1.4;
+      flex-shrink: 0;
+    }
+    .sched-dot {
+      position: relative;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      padding-top: 1.85rem;
+      flex-shrink: 0;
+    }
+    .sched-dot::before {
+      content: '';
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--bg-base);
+      border: 2px solid var(--text-lo);
+      flex-shrink: 0;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+      z-index: 1;
+    }
+    .sched-session .sched-dot::before {
+      border-color: var(--gold);
+      background: var(--gold-dim);
+    }
+    .sched-break .sched-dot::before {
+      border-color: var(--text-lo);
+      background: var(--bg-surface);
+    }
+    .sched-body {
+      padding: 1.25rem 0 1.25rem 0;
+      flex: 1;
+    }
+    .sched-tag {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .tag-session {
+      background: var(--gold-dim);
+      color: var(--gold-light);
+      border: 1px solid rgba(26,95,168,0.22);
+    }
+    .tag-break {
+      background: rgba(90, 110, 160, 0.12);
+      color: var(--text-lo);
+      border: 1px solid rgba(78,93,120,0.2);
+    }
+    .tag-opening, .tag-closing {
+      background: rgba(46, 155, 146, 0.1);
+      color: var(--teal);
+      border: 1px solid rgba(46,155,146,0.2);
+    }
+    .sched-name {
+      font-weight: 500;
+      font-size: 0.92rem;
+      color: var(--text-hi);
+      line-height: 1.4;
+    }
+    .sched-talks {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .sched-talk {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding: 0.7rem 1rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .sched-talk:hover {
+      background: var(--bg-elevated);
+      border-color: var(--border-hi);
+    }
+    .sched-talk:hover .sched-talk-title {
+      color: var(--text-hi);
+    }
+    .sched-talk-time {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-lo);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .sched-talk-speaker {
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: var(--gold-light);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .sched-talk-title {
+      font-size: 0.8rem;
+      color: var(--text-md);
+      font-style: italic;
+    }
+
+    /* ─── Speakers ──────────────────────────────────────────── */
+    #speakers {
+      background: var(--bg-void);
+    }
+    .speakers-header {
+      max-width: 1200px;
+      margin: 0 auto 3.5rem;
+    }
+    .speakers-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.25rem;
+    }
+    .speaker-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.3s var(--ease-spring), box-shadow 0.3s;
+      position: relative;
+    }
+    .speaker-card:hover {
+      border-color: var(--border-hi);
+      transform: translateY(-4px);
+      box-shadow:
+        0 4px 6px rgba(0,0,0,0.06),
+        0 12px 40px rgba(0,0,0,0.10),
+        0 0 0 1px rgba(26,95,168,0.10);
+    }
+    .speaker-top {
+      padding: 1.75rem 1.75rem 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.1rem;
+    }
+    .speaker-card { cursor: pointer; }
+    .speaker-avatar {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      border: 2px solid var(--border-hi);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .speaker-avatar img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .speaker-info { flex: 1; min-width: 0; }
+    .speaker-name {
+      font-family: var(--font-disp);
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--text-hi);
+      line-height: 1.2;
+      margin-bottom: 0.3rem;
+    }
+    .speaker-affil {
+      font-size: 0.72rem;
+      color: var(--text-lo);
+      font-weight: 400;
+    }
+    .speaker-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 1.75rem;
+    }
+    .speaker-bottom {
+      padding: 1.1rem 1.75rem 1.5rem;
+    }
+    .speaker-bio-snippet {
+      font-size: 0.8rem;
+      line-height: 1.7;
+      color: var(--text-lo);
+    }
+    .speaker-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.9rem;
+    }
+    .speaker-card-hint {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .speaker-card:hover .speaker-card-hint { opacity: 1; }
+    .speaker-scholar {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.68rem;
+      font-weight: 500;
+      color: var(--text-lo);
+      transition: color 0.2s;
+      position: relative;
+      z-index: 2;
+    }
+    .speaker-scholar:hover { color: var(--gold-light); }
+
+    /* ─── Organizers ────────────────────────────────────────── */
+    #organizers {
+      background: var(--bg-base);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .organizers-header {
+      max-width: 1100px;
+      margin: 0 auto 3rem;
+    }
+    .organizers-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .organizer-card {
+      background: var(--bg-surface);
+      padding: 2rem 1.75rem;
+      transition: background 0.2s;
+    }
+    .organizer-card:hover { background: var(--bg-elevated); }
+    .org-photo {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      border: 2px solid var(--border-hi);
+      overflow: hidden;
+      margin-bottom: 1.1rem;
+    }
+    .org-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .org-name {
+      font-family: var(--font-disp);
+      font-weight: 500;
+      font-size: 1.05rem;
+      color: var(--text-hi);
+      margin-bottom: 0.3rem;
+    }
+    .org-affil {
+      font-size: 0.78rem;
+      color: var(--text-lo);
+      line-height: 1.55;
+      margin-bottom: 0.75rem;
+    }
+    .scholar-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--gold);
+      transition: color 0.2s;
+    }
+    .scholar-link:hover { color: var(--gold-light); }
+    .scholar-link svg { flex-shrink: 0; }
+
+    /* ─── Partners / Logos ──────────────────────────────────── */
+    #partners {
+      background: var(--bg-void);
+      padding-top: 3.5rem;
+      padding-bottom: 3.5rem;
+    }
+    .partners-label {
+      text-align: center;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-lo);
+      margin-bottom: 2.5rem;
+    }
+    .partners-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(2rem, 5vw, 5rem);
+      flex-wrap: wrap;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .partner-logo {
+      height: 46px;
+      width: auto;
+      max-width: 160px;
+      object-fit: contain;
+      transition: transform 0.3s var(--ease-spring), opacity 0.3s;
+      opacity: 0.85;
+    }
+    .partner-logo:hover {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+    .partner-logo.logo-svg {
+      height: 42px;
+    }
+
+    /* ─── Footer ────────────────────────────────────────────── */
+    footer {
+      background: var(--bg-base);
+      border-top: 1px solid var(--border);
+      padding: 3rem clamp(1.5rem, 8vw, 8rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .footer-title {
+      font-family: var(--font-disp);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-hi);
+    }
+    .footer-sub {
+      font-size: 0.78rem;
+      color: var(--text-lo);
+    }
+    .footer-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.4rem;
+    }
+    .footer-contact-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-lo);
+    }
+    .footer-contact-email {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--gold);
+      transition: color 0.2s;
+    }
+    .footer-contact-email:hover { color: var(--gold-light); }
+
+    /* ─── Bio Modal ─────────────────────────────────────────── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 22, 40, 0.60);
+      backdrop-filter: blur(12px);
+      z-index: 9000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s var(--ease-out);
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hi);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 88vh;
+      overflow-y: auto;
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.35s var(--ease-spring);
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-hi) transparent;
+    }
+    .modal-backdrop.open .modal {
+      transform: none;
+    }
+    .modal-header {
+      padding: 2rem 2rem 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg-card);
+      z-index: 1;
+    }
+    .modal-photo {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--border-hi);
+      flex-shrink: 0;
+    }
+    .modal-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .modal-header-info { flex: 1; }
+    .modal-name {
+      font-family: var(--font-disp);
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--text-hi);
+      line-height: 1.2;
+      margin-bottom: 0.3rem;
+    }
+    .modal-affil {
+      font-size: 0.8rem;
+      color: var(--text-lo);
+      margin-bottom: 0.4rem;
+    }
+    .modal-scholar {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--gold);
+      transition: color 0.2s;
+    }
+    .modal-scholar:hover { color: var(--gold-light); }
+    .modal-close {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 34px; height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-lo);
+      flex-shrink: 0;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .modal-close:hover {
+      border-color: var(--border-hi);
+      color: var(--text-hi);
+      background: var(--bg-elevated);
+    }
+    .modal-body {
+      padding: 1.75rem 2rem 2rem;
+    }
+    .modal-talk-label {
+      font-size: 0.63rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+    .modal-talk-title {
+      font-style: italic;
+      font-family: var(--font-disp);
+      font-size: 1.1rem;
+      color: var(--text-hi);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+    .modal-section-label {
+      font-size: 0.63rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+      margin-top: 1.5rem;
+    }
+    .modal-section-label:first-of-type { margin-top: 0; }
+    .modal-abstract, .modal-bio {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--text-md);
+    }
+    .modal-abstract strong, .modal-bio strong {
+      color: var(--text-hi);
+      font-weight: 500;
+    }
+
+    /* ─── Responsive ────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-sidebar { flex-direction: row; flex-wrap: wrap; }
+      .about-stat { flex: 1; min-width: 140px; }
+      nav .nav-links { display: none; }
+      .schedule-wrapper::before { left: 72px; }
+      .sched-time { min-width: 72px; }
+    }
+    @media (max-width: 600px) {
+      .hero-content { padding-top: 100px; }
+      .hero-ifac-logo { display: none; }
+      .hero-scroll-hint { display: none; }
+      .sched-talk { flex-direction: column; gap: 0.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Navigation ──────────────────────────────────────── -->
+  <nav>
+    <div class="nav-brand">
+      <div class="nav-brand-text">
+        Safety as a System Property
+        <span>IFAC World Congress 2026 · Busan</span>
+      </div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#topics">Topics</a></li>
+      <li><a href="#schedule">Schedule</a></li>
+      <li><a href="#speakers">Speakers</a></li>
+      <li><a href="#organizers">Organizers</a></li>
+    </ul>
+    <a href="#organizers" class="nav-cta">Organizers</a>
+  </nav>
+
+  <!-- ─── Hero ────────────────────────────────────────────── -->
+  <section id="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-gradient"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        <span class="hero-badge-text">23rd IFAC World Congress 2026 · Busan, Korea</span>
+      </div>
+
+      <h1 class="hero-title">
+        Safety as a<br>
+        <em>System Property</em>
+      </h1>
+      <p class="hero-subtitle">From Control Design to Data-Driven Autonomy</p>
+
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Date</span>
+          <span class="hero-meta-value">August 23, 2026</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Time</span>
+          <span class="hero-meta-value">09:00 – 17:30</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Speakers</span>
+          <span class="hero-meta-value">9 Invited Talks</span>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <a href="#schedule" class="btn-primary">
+          View Schedule
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#speakers" class="btn-secondary">
+          Meet the Speakers
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-ifac-logo">
+      <img src="brand_assets/IFAC_2026_Logo_gif.gif" alt="IFAC 2026 Busan">
+    </div>
+
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ─── About ────────────────────────────────────────────── -->
+  <section id="about">
+    <div class="about-body reveal">
+      <h2 class="section-title">About the Workshop</h2>
+      <div class="section-divider"></div>
+      <p>
+        Autonomous systems have advanced rapidly and are increasingly deployed in safety-critical domains — transportation, robotics, energy, and aerospace. As these systems operate with reduced human oversight in dynamic environments and rely on learning-enabled components, <strong>failures can have severe consequences</strong>, making safety a primary requirement rather than a secondary concern.
+      </p>
+      <p>
+        Classical control theory provides powerful tools for stability and robustness, while advances in learning, optimization, and formal methods address uncertainty and complexity. In modern autonomous systems, however, tightly coupled perception, learning, planning, and control pipelines mean that <strong>safety cannot be fully understood by analyzing individual components in isolation</strong>.
+      </p>
+      <p>
+        A key insight of this workshop is that safety must be treated as a <strong>system-level property</strong> spanning the full autonomy pipeline — from data and learning to decision making, planning, and control. By bringing together ideas from robust and stochastic control, safety-critical control, distributional methods, system-level synthesis, and formal verification, the workshop aims to advance principled approaches for system-level safety assurance in data-driven autonomous systems.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── Topics ───────────────────────────────────────────── -->
+  <section id="topics">
+    <div class="topics-header reveal">
+      <h2 class="section-title">Topics of Interest</h2>
+      <div class="section-divider"></div>
+    </div>
+    <ul class="topics-list reveal">
+      <li>System-level formulations of safety in autonomous systems operating under uncertainty</li>
+      <li>Safety-critical control design and analysis, including robust, stochastic, and distributionally robust methods</li>
+      <li>Integration of learning-enabled and data-driven components with formal or control-theoretic safety guarantees</li>
+      <li>Distributional and uncertainty-aware approaches to planning, estimation, and control</li>
+      <li>Safety in distributed, decentralized, networked, and multi-agent systems</li>
+      <li>Algorithmic and computational considerations, including scalability, robustness, and deployment</li>
+      <li>Case studies and applications in robotics, autonomous vehicles, energy systems, and cyber-physical systems</li>
+    </ul>
+  </section>
+
+  <!-- ─── Schedule ─────────────────────────────────────────── -->
+  <section id="schedule">
+    <div class="schedule-header reveal">
+      <h2 class="section-title">Program</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="schedule-wrapper reveal">
+
+      <!-- Opening -->
+      <div class="schedule-row sched-opening">
+        <div class="sched-time">09:00</div>
+        <div class="sched-dot"></div>
+        <div class="sched-body">
+          <span class="sched-tag tag-opening">Opening</span>
+          <div class="sched-name">Opening Remarks</div>
+        </div>
+      </div>
+
+      <!-- Session 1 -->
+      <div class="schedule-row sched-session">
+        <div class="sched-time">09:10 – 10:30</div>
+        <div class="sched-dot"></div>
+        <div class="sched-body">
+          <span class="sched-tag tag-session">Session 1</span>
+          <div class="sched-name">Layered Autonomy &amp; Distribution Shifts</div>
+          <div class="sched-talks">
+            <div class="sched-talk" data-speaker="Naira Hovakimyan" data-affil="University of Illinois Urbana–Champaign" data-photo="brand_assets/photos/Naira_Hovakimyan.jpg" data-talk="Ontological Robustness for Certification of Layered Autonomy Architectures" data-abstract="Learning-based control paradigms have seen many success stories with autonomous systems. A typical architecture involves layers for perception, planning and control, each using different tools and metrics for assessing robustness and performance. We present a new analysis framework for addressing this ontology challenge inherent to autonomous systems. We derive distributional robustness guarantees for deterministic L1 adaptive controllers that can be used by any stochastic planner without facing a language barrier. The combined planner-controller framework can serve as foundation for development of certificates for V&V of learning-enabled systems.">
+              <span class="sched-talk-time">09:10–09:50</span>
+              <span class="sched-talk-speaker">Naira Hovakimyan</span>
+              <span class="sched-talk-title">Ontological Robustness for Certification of Layered Autonomy Architectures</span>
+            </div>
+            <div class="sched-talk" data-speaker="Lars Lindemann" data-affil="ETH Zürich" data-photo="brand_assets/photos/Lars_Lindemann.jpg" data-talk="When Control Changes the Data: Safety under Interaction-Driven Distribution Shifts" data-abstract="Accelerated by rapid advances in machine learning and AI, there has been tremendous success in the design of learning-enabled autonomous systems. These developments are accompanied by new fundamental challenges regarding safety and reliability due to imperfect learning, system unknowns, and uncertain environments. Statistical tools for uncertainty quantification have gained popularity, but their guarantees rely on i.i.d. data — an assumption violated when control actions change the underlying data distribution. This talk presents new insights for designing safe controllers under distribution shifts using robust conformal prediction, including an iterative framework for interactive settings where system behavior influences the environment.">
+              <span class="sched-talk-time">09:50–10:30</span>
+              <span class="sched-talk-speaker">Lars Lindemann</span>
+              <span class="sched-talk-title">When Control Changes the Data: Safety under Interaction-Driven Distribution Shifts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Break 1 -->
+      <div class="schedule-row sched-break">
+        <div class="sched-time">10:30 – 10:50</div>
+        <div class="sched-dot"></div>
+        <div class="sched-body">
+          <span class="sched-tag tag-break">Break</span>
+          <div class="sched-name">Coffee Break</div>
+        </div>
+      </div>
+
+      <!-- Session 2 -->
+      <div class="schedule-row sched-session">
+        <div class="sched-time">10:50 – 12:50</div>
+        <div class="sched-dot"></div>
+        <div class="sched-body">
+          <span class="sched-tag tag-session">Session 2</span>
+          <div class="sched-name">Stochastic Safety &amp; Formal Methods</div>
+          <div class="sched-talks">
+            <div class="sched-talk" data-speaker="Yongxin Chen" data-affil="Georgia Institute of Technology" data-photo="brand_assets/photos/Yongxin_Chen.jpg" data-talk="Safety Assurance of Stochastic Systems" data-abstract="Safety is a critical requirement for real-world systems, including autonomous vehicles, robots, and power grids. While many methods exist for safety verification and control of deterministic systems, real-world applications also involve stochastic uncertainties. This talk presents a framework that decouples the effects of stochastic and deterministic disturbances. A key component provides high-confidence probabilistic bounds on deviations between stochastic system trajectories and their deterministic counterparts, applicable to both continuous- and discrete-time systems, reducing stochastic safety verification to a deterministic problem.">
+              <span class="sched-talk-time">10:50–11:30</span>
+              <span class="sched-talk-speaker">Yongxin Chen</span>
+              <span class="sched-talk-title">Safety Assurance of Stochastic Systems</span>
+            </div>
+            <div class="sched-talk" data-speaker="Calin Belta" data-affil="University of Maryland" data-photo="brand_assets/photos/Calin_Belta.png" data-talk="Formal Methods for Safe and Interpretable Control" data-abstract="In control theory, complicated dynamics such as systems of nonlinear differential equations are mostly controlled to achieve stability and optimize a cost. In formal methods, simple systems are analyzed from specifications such as safety and liveness expressed as temporal logic formulas. Many current applications involve high-dimensional and partially known dynamical systems requiring machine learning. This talk shows how control barrier and Lyapunov functions can be combined with temporal logics and reinforcement learning to achieve safety and interpretability, with examples from robotic manipulation and autonomous driving.">
+              <span class="sched-talk-time">11:30–12:10</span>
+              <span class="sched-talk-speaker">Calin Belta</span>
+              <span class="sched-talk-title">Formal Methods for Safe and Interpretable Control</span>
+            </div>
+            <div class="sched-talk" data-speaker="Tigran Bakaryan" data-affil="Institute of Mathematics NAS RA · Yerevan State University" data-photo="brand_assets/photos/Tigran_Bakaryan.jpg" data-talk="Fourier-Based Optimization for Constraint-Aware and Safety-Critical Optimal Control" data-abstract="We consider continuous-time optimal control problems with state and control constraints and present a spectral optimization framework suited for safety-critical and system-level control. The approach represents state and control trajectories using Fourier series and enforces system dynamics through global norm-based constraints, enabling principled handling of hard constraints without relying on pointwise collocation. By exploiting the L²-orthogonality of the Fourier basis, the resulting formulation admits a compact quadratic structure with reduced computational complexity and efficient numerical implementation.">
+              <span class="sched-talk-time">12:10–12:50</span>
+              <span class="sched-talk-speaker">Tigran Bakaryan</span>
+              <span class="sched-talk-title">Fourier-Based Optimization for Constraint-Aware and Safety-Critical Optimal Control</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lunch -->
+      <div class="schedule-row sched-break">
+        <div class="sched-time">12:50 – 14:20</div>
+        <div class="sched-dot"></div>
+        <div class="sched-body">
+          <span class="sched-tag tag-break">Break</span>
+          <div class="sched-name">Lunch Break</div>
+        </div>
+      </div>
+
+      <!-- Session 3 -->
+      <div class="schedule-row sched-session">
+        <div class="sched-time">14:20 – 15:40</div>
+        <div class="sched-dot"></div>
+        <div class="sched-body">
+          <span class="sched-tag tag-session">Session 3</span>
+          <div class="sched-name">Compositional &amp; Networked Systems</div>
+          <div class="sched-talks">
+            <div class="sched-talk" data-speaker="Gioele Zardini" data-affil="Massachusetts Institute of Technology" data-photo="brand_assets/photos/Gioele_Zardini.png" data-talk="Compositional Design of Society-Critical Systems: From Autonomy to Future Mobility" data-abstract="When designing complex systems, it is necessary to consider trade-offs across multiple abstraction levels and scales, and to study component-level design choices jointly. In the context of future mobility, the design of autonomous vehicles and the mobility systems they enable are tightly coupled. This talk presents a framework for the compositional co-design of complex sociotechnical systems, leveraging monotone co-design theory and tools from game theory. The framework is instantiated through case studies spanning city-level policy design and autonomous mobility-on-demand services, demonstrating how it enables modularity, interoperability, and scalable system-level optimization.">
+              <span class="sched-talk-time">14:20–15:00</span>
+              <span class="sched-talk-speaker">Gioele Zardini</span>
+              <span class="sched-talk-title">Compositional Design of Society-Critical Systems: From Autonomy to Future Mobility</span>
+            </div>
+            <div class="sched-talk" data-speaker="Karl H. Johansson" data-affil="KTH Royal Institute of Technology" data-photo="brand_assets/photos/Karl_Johansson.jpg" data-talk="Safe Learning and Control of Mixed-Autonomy Traffic" data-abstract="Road infrastructure remains significantly underutilized in today's traffic systems. In mixed-autonomy environments, where connected and automated vehicles share the road with human-driven vehicles, there is substantial potential to improve efficiency, resilience, and sustainability. This talk presents advances in physics-informed machine learning for mixed-autonomy traffic, demonstrating hybrid modeling approaches that integrate traffic flow theory with data-driven learning to achieve robust, scalable, adaptive models capable of operating under dynamic and uncertain conditions, supporting proactive traffic control with formal safety guarantees.">
+              <span class="sched-talk-time">15:00–15:40</span>
+              <span class="sched-talk-speaker">Karl H. Johansson</span>
+              <span class="sched-talk-title">Safe Learning and Control of Mixed-Autonomy Traffic</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Break 2 -->
+      <div class="schedule-row sched-break">
+        <div class="sched-time">15:40 – 16:00</div>
+        <div class="sched-dot"></div>
+        <div class="sched-body">
+          <span class="sched-tag tag-break">Break</span>
+          <div class="sched-name">Coffee Break</div>
+        </div>
+      </div>
+
+      <!-- Session 4 -->
+      <div class="schedule-row sched-session">
+        <div class="sched-time">16:00 – 17:20</div>
+        <div class="sched-dot"></div>
+        <div class="sched-body">
+          <span class="sched-tag tag-session">Session 4</span>
+          <div class="sched-name">AI-Enabled Safety &amp; Learning</div>
+          <div class="sched-talks">
+            <div class="sched-talk" data-speaker="Angela P. Schoellig" data-affil="Technical University of Munich" data-photo="brand_assets/photos/Angela_Schoellig.webp" data-talk="TBA" data-abstract="Title and abstract to be announced.">
+              <span class="sched-talk-time">16:00–16:40</span>
+              <span class="sched-talk-speaker">Angela P. Schoellig</span>
+              <span class="sched-talk-title">TBA</span>
+            </div>
+            <div class="sched-talk" data-speaker="Navid Azizan" data-affil="Massachusetts Institute of Technology" data-photo="brand_assets/photos/Navid_Azizan.jpg" data-talk="Towards Safe and Efficient AI-Enabled Autonomy" data-abstract="As AI models continue to deliver impressive performance, their deployment in real-world autonomous systems is becoming feasible. However, reliable deployment in safety-critical settings remains challenging due to unpredictable behavior under distribution shifts, limited ability to enforce hard constraints, and data inefficiency. This talk presents: a framework for incorporating hard constraints into neural network training via differentiable projection layers; run-time monitoring via uncertainty estimation and out-of-distribution detection; and control-oriented meta-learning and continual learning for fast, data-efficient adaptation in dynamic environments.">
+              <span class="sched-talk-time">16:40–17:20</span>
+              <span class="sched-talk-speaker">Navid Azizan</span>
+              <span class="sched-talk-title">Towards Safe and Efficient AI-Enabled Autonomy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Closing -->
+      <div class="schedule-row sched-closing">
+        <div class="sched-time">17:20</div>
+        <div class="sched-dot"></div>
+        <div class="sched-body">
+          <span class="sched-tag tag-closing">Closing</span>
+          <div class="sched-name">Closing Remarks</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Speakers ─────────────────────────────────────────── -->
+  <section id="speakers">
+    <div class="speakers-header reveal">
+      <h2 class="section-title">Invited Speakers</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="speakers-grid reveal">
+
+      <div class="speaker-card"
+        data-scholar="https://scholar.google.com/citations?user=8mA9QpUAAAAJ"
+        data-name="Naira Hovakimyan"
+        data-affil="W. Grafton and Lillian B. Wilkins Professor of Mechanical Science and Engineering; Director of the AVIATE Center, University of Illinois Urbana–Champaign"
+        data-photo="brand_assets/photos/Naira_Hovakimyan.jpg"
+        data-talk="Ontological Robustness for Certification of Layered Autonomy Architectures"
+        data-abstract="Learning-based control paradigms have seen many success stories with autonomous systems in recent years. A typical architecture involves layers for perception, planning and control, wherein each layer uses different tools and metrics for assessing robustness and performance. We present a new analysis framework for addressing this ontology challenge inherent to autonomous systems. We derive distributional robustness guarantees for deterministic L1 adaptive controllers that can be used by any stochastic planner without facing a language barrier. The combined planner-controller framework can serve as foundation for development of certificates for V&V of learning-enabled systems."
+        data-bio="Naira Hovakimyan received her MS degree in Applied Mathematics from Yerevan State University in Armenia and her Ph.D. in Physics and Mathematics from the Institute of Applied Mathematics of Russian Academy of Sciences in Moscow. She is currently W. Grafton and Lillian B. Wilkins Professor of Mechanical Science and Engineering and the Director of AVIATE Center of UIUC. She has co-authored two books, eleven patents and more than 500 refereed publications. She is the 2011 recipient of AIAA Mechanics and Control of Flight Award, the 2015 recipient of SWE Achievement Award, the 2017 recipient of IEEE CSS Award for Technical Excellence in Aerospace Controls, and the 2019 recipient of AIAA Pendray Aerospace Literature Award. In 2014 she was awarded the Humboldt prize for her lifetime achievements. She is Fellow of AIAA, IEEE, ASME, IFAC, and senior member of National Academy of Inventors. She has been named a Distinguished Lecturer for IEEE CSS for 2026–2028 and is co-founder and chief scientist of Intelinair.">
+        <div class="speaker-top">
+          <div class="speaker-avatar"><img src="brand_assets/photos/Naira_Hovakimyan.jpg" alt="Naira Hovakimyan"></div>
+          <div class="speaker-info">
+            <div class="speaker-name">Naira Hovakimyan</div>
+            <div class="speaker-affil">University of Illinois Urbana–Champaign</div>
+          </div>
+        </div>
+        <div class="speaker-divider"></div>
+        <div class="speaker-bottom">
+          <div class="speaker-card-footer">
+            <span class="speaker-card-hint">Full bio <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M6 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <a class="speaker-scholar" href="#" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+              Scholar
+            </a>
+          </div>
+          <div class="speaker-bio-snippet">W. Grafton and Lillian B. Wilkins Professor of Mechanical Science and Engineering and Director of the AVIATE Center at UIUC. Fellow of AIAA, IEEE, ASME, and IFAC. Co-founder and chief scientist of Intelinair. Author of 500+ publications and 11 patents.</div>
+        </div>
+      </div>
+
+      <div class="speaker-card"
+        data-scholar="https://scholar.google.com/citations?user=AkVKyzkAAAAJ"
+        data-name="Lars Lindemann"
+        data-affil="Assistant Professor for Algorithmic Systems Theory, Automatic Control Laboratory, ETH Zürich"
+        data-photo="brand_assets/photos/Lars_Lindemann.jpg"
+        data-talk="When Control Changes the Data: Safety under Interaction-Driven Distribution Shifts"
+        data-abstract="Accelerated by rapid advances in machine learning and AI, there has been tremendous success in the design of learning-enabled autonomous systems. These developments are accompanied by new fundamental challenges regarding safety and reliability due to imperfect learning, system unknowns, and uncertain environments. Statistical tools for uncertainty quantification have gained popularity, but their guarantees rely on i.i.d. data — an assumption violated when control actions change the underlying data distribution. This talk presents new insights for designing safe controllers under distribution shifts using robust conformal prediction (CP), including an iterative framework for interactive settings where system behavior influences the environment."
+        data-bio="Lars Lindemann is currently an Assistant Professor for Algorithmic Systems Theory in the Automatic Control Laboratory at ETH Zürich. From 2023 to 2025 he was an Assistant Professor in the Thomas Lord Department of Computer Science at the University of Southern California. From 2020 to 2022 he was a Postdoctoral Fellow in the Department of Electrical and Systems Engineering at the University of Pennsylvania. He received his Ph.D. in Electrical Engineering from KTH Royal Institute of Technology in 2020. His research interests include systems and control theory, formal methods, machine learning, and autonomous systems. He received the Outstanding Student Paper Award at the 58th IEEE Conference on Decision and Control and the Student Best Paper Award at the 60th IEEE CDC.">
+        <div class="speaker-top">
+          <div class="speaker-avatar"><img src="brand_assets/photos/Lars_Lindemann.jpg" alt="Lars Lindemann"></div>
+          <div class="speaker-info">
+            <div class="speaker-name">Lars Lindemann</div>
+            <div class="speaker-affil">ETH Zürich</div>
+          </div>
+        </div>
+        <div class="speaker-divider"></div>
+        <div class="speaker-bottom">
+          <div class="speaker-card-footer">
+            <span class="speaker-card-hint">Full bio <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M6 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <a class="speaker-scholar" href="#" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+              Scholar
+            </a>
+          </div>
+          <div class="speaker-bio-snippet">Assistant Professor for Algorithmic Systems Theory, Automatic Control Laboratory, ETH Zürich. Previously at USC and UPenn. Ph.D. from KTH Royal Institute of Technology. Research in systems theory, formal methods, machine learning, and autonomous systems.</div>
+        </div>
+      </div>
+
+      <div class="speaker-card"
+        data-scholar="https://scholar.google.com/citations?user=2z7iDDUAAAAJ"
+        data-name="Yongxin Chen"
+        data-affil="Associate Professor, School of Aerospace Engineering, Georgia Institute of Technology"
+        data-photo="brand_assets/photos/Yongxin_Chen.jpg"
+        data-talk="Safety Assurance of Stochastic Systems"
+        data-abstract="Safety is a critical requirement for real-world systems, including autonomous vehicles, robots, and power grids. While many methods exist for safety verification and control of deterministic systems, real-world applications also involve stochastic uncertainties. This talk presents a framework that decouples the effects of stochastic and deterministic disturbances. A key component is a novel technique providing high-confidence probabilistic bounds on deviations between stochastic system trajectories and their deterministic counterparts, applicable to both continuous- and discrete-time systems, reducing stochastic safety verification to a deterministic problem."
+        data-bio="Yongxin Chen received his BSc in Mechanical Engineering from Shanghai Jiao Tong University in 2011, and a Ph.D. in Mechanical Engineering from the University of Minnesota in 2016. He is currently an Associate Professor in the School of Aerospace Engineering at Georgia Institute of Technology. Before joining Georgia Tech, he was a Research Fellow at Memorial Sloan Kettering Cancer Center (2016–2017) and an Assistant Professor at Iowa State University (2017–2018). He received the George S. Axelby Best Paper Award (IEEE TAC) in 2017, the SIAM Journal on Control and Optimization Best Paper Award in 2023, the NSF CAREER Award in 2020, the A.V. 'Bal' Balakrishnan Award in 2021, and the Donald P. Eckman Award in 2022.">
+        <div class="speaker-top">
+          <div class="speaker-avatar"><img src="brand_assets/photos/Yongxin_Chen.jpg" alt="Yongxin Chen"></div>
+          <div class="speaker-info">
+            <div class="speaker-name">Yongxin Chen</div>
+            <div class="speaker-affil">Georgia Institute of Technology</div>
+          </div>
+        </div>
+        <div class="speaker-divider"></div>
+        <div class="speaker-bottom">
+          <div class="speaker-card-footer">
+            <span class="speaker-card-hint">Full bio <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M6 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <a class="speaker-scholar" href="#" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+              Scholar
+            </a>
+          </div>
+          <div class="speaker-bio-snippet">Associate Professor, School of Aerospace Engineering, Georgia Tech. Ph.D. from University of Minnesota. Recipient of NSF CAREER Award (2020), George S. Axelby Best Paper Award (2017), Donald P. Eckman Award (2022), and Simons-Berkeley Fellowship (2021).</div>
+        </div>
+      </div>
+
+      <div class="speaker-card"
+        data-scholar="https://scholar.google.com/citations?user=72yPqG4AAAAJ"
+        data-name="Calin Belta"
+        data-affil="Brendan Iribe Endowed Professor of Electrical and Computer Engineering and Computer Science, University of Maryland"
+        data-photo="brand_assets/photos/Calin_Belta.png"
+        data-talk="Formal Methods for Safe and Interpretable Control"
+        data-abstract="In control theory, complicated dynamics such as systems of nonlinear differential equations are mostly controlled to achieve stability and optimize a cost. In formal methods, simple systems are analyzed from specifications such as safety, liveness, or richer requirements expressed as temporal logic formulas. Many current applications, such as dexterous robotic manipulation, involve high-dimensional and partially known dynamical systems requiring machine learning techniques. This talk shows how techniques based on control barrier and Lyapunov functions can be combined with temporal logics and reinforcement learning to address these challenges, with examples from robotic manipulation and autonomous driving."
+        data-bio="Calin Belta is the Brendan Iribe Endowed Professor of Electrical and Computer Engineering and Computer Science at the University of Maryland, College Park, where he is also part of the Maryland Robotics Center (MRC) and the Institute for Systems Research (ISR). His research focuses on making control and machine learning systems safe and interpretable, with particular emphasis on robotics and systems biology. Notable awards include the AFOSR YIP, the NSF CAREER award, and the HSCC Test of Time award. He is a Fellow of the IEEE.">
+        <div class="speaker-top">
+          <div class="speaker-avatar"><img src="brand_assets/photos/Calin_Belta.png" alt="Calin Belta" style="object-position: center center;"></div>
+          <div class="speaker-info">
+            <div class="speaker-name">Calin Belta</div>
+            <div class="speaker-affil">University of Maryland</div>
+          </div>
+        </div>
+        <div class="speaker-divider"></div>
+        <div class="speaker-bottom">
+          <div class="speaker-card-footer">
+            <span class="speaker-card-hint">Full bio <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M6 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <a class="speaker-scholar" href="#" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+              Scholar
+            </a>
+          </div>
+          <div class="speaker-bio-snippet">Brendan Iribe Endowed Professor of ECE and CS, University of Maryland. Member of the Maryland Robotics Center and Institute for Systems Research. Fellow of the IEEE. Recipient of AFOSR YIP, NSF CAREER, and HSCC Test of Time awards.</div>
+        </div>
+      </div>
+
+      <div class="speaker-card"
+        data-scholar="https://scholar.google.com/citations?user=5rPFjx4AAAAJ"
+        data-name="Tigran Bakaryan"
+        data-affil="Leading Researcher, Institute of Mathematics NAS RA; Center for Scientific Innovation and Education; Assistant Professor, Yerevan State University"
+        data-photo="brand_assets/photos/Tigran_Bakaryan.jpg"
+        data-talk="Fourier-Based Optimization for Constraint-Aware and Safety-Critical Optimal Control"
+        data-abstract="We consider continuous-time optimal control problems with state and control constraints and present a spectral optimization framework suited for safety-critical and system-level control applications. The approach represents state and control trajectories using Fourier series and enforces system dynamics through global norm-based constraints, enabling principled handling of hard constraints without relying on pointwise collocation. To support system-level safety analysis beyond idealized periodic settings, we extend Fourier-based methods to non-periodic problems using Eckhoff-type techniques that improve convergence and mitigate boundary effects. By exploiting the L²-orthogonality of the Fourier basis, the resulting formulation admits a compact quadratic structure with reduced computational complexity."
+        data-bio="Tigran Bakaryan is a Leading Researcher at the Center for Scientific Innovations and Education at the Institute of Mathematics of the National Academy of Sciences of Armenia, and an Assistant Professor at Yerevan State University. He received his Bachelor's and Master's degrees from YSU and earned his Ph.D. in Fourier Analysis at the Institute of Mathematics of the NAS of Armenia. In 2018, he joined King Abdullah University of Science and Technology (KAUST) as a postdoctoral fellow, working on the theory of Mean-Field Games, with visiting positions at Sapienza University of Rome and the University of Catania. In 2023, he joined UIUC as a postdoctoral research associate, focusing on applied problems in multi-agent autonomous systems. His research interests span PDE theory, game theory, MFG theory, control theory, and multi-agent autonomous systems.">
+        <div class="speaker-top">
+          <div class="speaker-avatar"><img src="brand_assets/photos/Tigran_Bakaryan.jpg" alt="Tigran Bakaryan"></div>
+          <div class="speaker-info">
+            <div class="speaker-name">Tigran Bakaryan</div>
+            <div class="speaker-affil">Inst. of Mathematics NAS RA · YSU</div>
+          </div>
+        </div>
+        <div class="speaker-divider"></div>
+        <div class="speaker-bottom">
+          <div class="speaker-card-footer">
+            <span class="speaker-card-hint">Full bio <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M6 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <a class="speaker-scholar" href="#" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+              Scholar
+            </a>
+          </div>
+          <div class="speaker-bio-snippet">Leading Researcher, Institute of Mathematics NAS RA and CSIE; Assistant Professor, Yerevan State University. Ph.D. in Fourier Analysis. Postdoctoral fellow at KAUST (MFG theory) and UIUC (multi-agent autonomous systems). Research in PDE theory, game theory, and control.</div>
+        </div>
+      </div>
+
+      <div class="speaker-card"
+        data-scholar="https://scholar.google.com/citations?user=0c3J5KUAAAAJ"
+        data-name="Gioele Zardini"
+        data-affil="Rudge (1948) and Nancy Allen Career Development Assistant Professor, MIT; PI in LIDS and CEE"
+        data-photo="brand_assets/photos/Gioele_Zardini.png"
+        data-talk="Compositional Design of Society-Critical Systems: From Autonomy to Future Mobility"
+        data-abstract="When designing complex systems, it is necessary to consider trade-offs across multiple abstraction levels and scales, and to study component-level design choices jointly. In the context of future mobility, the design of autonomous vehicles and the mobility systems they enable are tightly coupled. This talk presents a framework for the compositional co-design of complex sociotechnical systems, leveraging monotone co-design theory and tools from game theory. The framework is instantiated through case studies spanning city-level policy design and autonomous mobility-on-demand services, demonstrating how the proposed approach enables modularity, interoperability, and scalable system-level optimization."
+        data-bio="Gioele Zardini is the Rudge (1948) and Nancy Allen Assistant Professor at MIT, with appointments in LIDS and the Department of Civil and Environmental Engineering (CEE), and is an affiliate faculty of the Institute for Data, Systems and Society (IDSS). He received his Ph.D. in 2024 from ETH Zurich, where he also earned B.Sc. and M.Sc. degrees in Mechanical Engineering and Robotics, Systems and Control. Prior to MIT, he was a Postdoctoral Scholar at Stanford University and held visiting positions at nuTonomy Singapore (Aptiv/Motional), Stanford, and MIT. His honors include the ETH Medal, the 2025 DARPA Young Faculty Award, Best Paper awards at ITSC and the Applied Category Theory Conference, and research awards from DoE, MIT, AFOSR, SIDARA, and Amazon.">
+        <div class="speaker-top">
+          <div class="speaker-avatar"><img src="brand_assets/photos/Gioele_Zardini.png" alt="Gioele Zardini"></div>
+          <div class="speaker-info">
+            <div class="speaker-name">Gioele Zardini</div>
+            <div class="speaker-affil">Massachusetts Institute of Technology</div>
+          </div>
+        </div>
+        <div class="speaker-divider"></div>
+        <div class="speaker-bottom">
+          <div class="speaker-card-footer">
+            <span class="speaker-card-hint">Full bio <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M6 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <a class="speaker-scholar" href="#" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+              Scholar
+            </a>
+          </div>
+          <div class="speaker-bio-snippet">Rudge (1948) and Nancy Allen Assistant Professor at MIT, PI in LIDS and CEE. Ph.D. from ETH Zurich (2024). ETH Medal recipient, 2025 DARPA Young Faculty Award. Research on compositional co-design of complex autonomous and sociotechnical systems.</div>
+        </div>
+      </div>
+
+      <div class="speaker-card"
+        data-scholar="https://scholar.google.com/citations?user=wWCUYdsAAAAJ"
+        data-name="Karl H. Johansson"
+        data-affil="Swedish Research Council Distinguished Professor, KTH Royal Institute of Technology; Founding Director of Digital Futures"
+        data-photo="brand_assets/photos/Karl_Johansson.jpg"
+        data-talk="Safe Learning and Control of Mixed-Autonomy Traffic"
+        data-abstract="Road infrastructure remains significantly underutilized in today's traffic systems. In mixed-autonomy environments, where connected and automated vehicles (CAVs) share the road with human-driven vehicles, there is substantial potential to improve efficiency, resilience, and sustainability. This talk presents recent advances in physics-informed machine learning for modeling and control of mixed traffic, demonstrating hybrid modeling approaches that integrate traffic flow theory with data-driven learning to achieve robust, scalable, and adaptive models. These models support proactive traffic control strategies with formal safety guarantees, including teleoperation as a structured fallback mechanism."
+        data-bio="Karl H. Johansson is Swedish Research Council Distinguished Professor in Electrical Engineering and Computer Science at KTH Royal Institute of Technology and Founding Director of Digital Futures. He earned his MSc in Electrical Engineering and PhD in Automatic Control from Lund University, and has held visiting positions at UC Berkeley, Caltech, NTU and others. His research focuses on networked control systems and cyber-physical systems. He has received numerous best paper awards from IEEE, IFAC, and others, and has been awarded Distinguished Professor by the Swedish Research Council and Wallenberg Scholar. He has been President of the European Control Association and IEEE CSS Vice President. He is Fellow of both the IEEE and the Royal Swedish Academy of Engineering Sciences.">
+        <div class="speaker-top">
+          <div class="speaker-avatar"><img src="brand_assets/photos/Karl_Johansson.jpg" alt="Karl H. Johansson"></div>
+          <div class="speaker-info">
+            <div class="speaker-name">Karl H. Johansson</div>
+            <div class="speaker-affil">KTH Royal Institute of Technology</div>
+          </div>
+        </div>
+        <div class="speaker-divider"></div>
+        <div class="speaker-bottom">
+          <div class="speaker-card-footer">
+            <span class="speaker-card-hint">Full bio <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M6 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <a class="speaker-scholar" href="#" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+              Scholar
+            </a>
+          </div>
+          <div class="speaker-bio-snippet">Swedish Research Council Distinguished Professor, KTH Royal Institute of Technology; Founding Director of Digital Futures. Former President of the European Control Association. Fellow of IEEE and the Royal Swedish Academy of Engineering Sciences.</div>
+        </div>
+      </div>
+
+      <div class="speaker-card"
+        data-scholar="https://scholar.google.com/citations?user=QMfeRz0AAAAJ"
+        data-name="Angela P. Schoellig"
+        data-affil="Alexander von Humboldt Professor of Robotics and Artificial Intelligence, Technical University of Munich; Coordinator, Robotics Institute Germany"
+        data-photo="brand_assets/photos/Angela_Schoellig.webp"
+        data-talk="TBA"
+        data-abstract="Angela Schoellig conducts research at the intersection of robotics, controls, and machine learning. Her goal is to enhance the performance, safety, and autonomy of robots by enabling them to learn from past experiments and from each other."
+        data-bio="Angela Schoellig is an Alexander von Humboldt Professor of Robotics and Artificial Intelligence at the Technical University of Munich. She is a member of the Board of Directors at the Munich Institute of Robotics and Machine Intelligence (MIRMI) and serves as Coordinator of the Robotics Institute Germany (RIG). Before moving to Munich in 2022, she was an Associate Professor at the University of Toronto and a Faculty Member of the Vector Institute for AI. She has held a Canada Research Chair in Machine Learning for Robotics and Control and a Canada CIFAR Chair in AI. Angela is the recipient of an NSERC Arthur B. McDonald Fellowship (2022), the Robotics: Science and Systems Early Career Spotlight Award (2019), a Sloan Research Fellowship (2017), and an Ontario Early Researcher Award (2017). Her team is the four-time winner of the North American SAE AutoDrive Challenge (2018–21). Her PhD at ETH Zurich (2013) was awarded the ETH Medal and the Dimitris N. Chorafas Foundation Award.">
+        <div class="speaker-top">
+          <div class="speaker-avatar"><img src="brand_assets/photos/Angela_Schoellig.webp" alt="Angela P. Schoellig"></div>
+          <div class="speaker-info">
+            <div class="speaker-name">Angela P. Schoellig</div>
+            <div class="speaker-affil">Technical University of Munich</div>
+          </div>
+        </div>
+        <div class="speaker-divider"></div>
+        <div class="speaker-bottom">
+          <div class="speaker-card-footer">
+            <span class="speaker-card-hint">Full bio <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M6 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <a class="speaker-scholar" href="#" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+              Scholar
+            </a>
+          </div>
+          <div class="speaker-bio-snippet">Alexander von Humboldt Professor of Robotics and AI, TU Munich; Coordinator of the Robotics Institute Germany. Canada Research Chair in ML for Robotics and Control. Sloan Fellow, NSERC McDonald Fellow. Four-time SAE AutoDrive Challenge winner.</div>
+        </div>
+      </div>
+
+      <div class="speaker-card"
+        data-scholar="https://scholar.google.com/citations?user=3gMiILkAAAAJ"
+        data-name="Navid Azizan"
+        data-affil="Alfred H. (1929) and Jean M. Hayes Assistant Professor, MIT; PI in LIDS; Dept. of Mechanical Engineering and IDSS"
+        data-photo="brand_assets/photos/Navid_Azizan.jpg"
+        data-talk="Towards Safe and Efficient AI-Enabled Autonomy"
+        data-abstract="As AI models continue to deliver impressive performance, their deployment in real-world autonomous systems is becoming feasible. However, reliable deployment in safety-critical settings remains challenging due to unpredictable behavior under distribution shifts, limited ability to enforce hard constraints, and data inefficiency. This talk presents recent advances including: a framework for incorporating hard constraints into neural network training via differentiable projection layers; run-time monitoring methods based on uncertainty estimation and out-of-distribution detection; and control-oriented meta-learning and continual learning for fast, data-efficient adaptation in dynamic environments."
+        data-bio="Navid Azizan is the Alfred H. (1929) and Jean M. Hayes Assistant Professor at MIT, with dual appointments in Mechanical Engineering (Control, Instrumentation &amp; Robotics) and the Institute for Data, Systems &amp; Society (IDSS), and is a Principal Investigator in LIDS. His research spans machine learning, systems and control, mathematical optimization, and network science, with a focus on reliable intelligent systems. He received his PhD in Computing and Mathematical Sciences from Caltech in 2020, his MSc from USC in 2015, and his BSc from Sharif University of Technology in 2013. Prior to MIT, he completed postdoctoral work at Stanford and was a research scientist intern at Google DeepMind. His work has been recognized with awards from Google, Amazon, MathWorks, and IBM. He was named Outstanding Academic Leader in Data by CDO Magazine in 2023 and 2024, and received MIT's Frank E. Perkins Award for Excellence in Graduate Advising.">
+        <div class="speaker-top">
+          <div class="speaker-avatar"><img src="brand_assets/photos/Navid_Azizan.jpg" alt="Navid Azizan"></div>
+          <div class="speaker-info">
+            <div class="speaker-name">Navid Azizan</div>
+            <div class="speaker-affil">Massachusetts Institute of Technology</div>
+          </div>
+        </div>
+        <div class="speaker-divider"></div>
+        <div class="speaker-bottom">
+          <div class="speaker-card-footer">
+            <span class="speaker-card-hint">Full bio <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M6 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <a class="speaker-scholar" href="#" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+              Scholar
+            </a>
+          </div>
+          <div class="speaker-bio-snippet">Alfred H. Hayes Assistant Professor at MIT, dual appointment in Mechanical Engineering and IDSS; PI in LIDS. Ph.D. from Caltech. Research in machine learning, control, and optimization for reliable intelligent systems. MIT Frank E. Perkins Award for Excellence in Graduate Advising.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Organizers ────────────────────────────────────────── -->
+  <section id="organizers">
+    <div class="organizers-header reveal">
+      <h2 class="section-title">Organizing Committee</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="organizers-grid reveal">
+
+      <div class="organizer-card">
+        <div class="org-photo"><img src="brand_assets/photos/Naira_Hovakimyan.jpg" alt="Naira Hovakimyan"></div>
+        <div class="org-name">Naira Hovakimyan</div>
+        <div class="org-affil">University of Illinois Urbana–Champaign<br>Urbana, IL, USA</div>
+        <a href="https://scholar.google.com/citations?user=8mA9QpUAAAAJ" target="_blank" rel="noopener" class="scholar-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+          Google Scholar
+        </a>
+      </div>
+
+      <div class="organizer-card">
+        <div class="org-photo"><img src="brand_assets/photos/Astghik_Hakobyan.jpg" alt="Astghik Hakobyan"></div>
+        <div class="org-name">Astghik Hakobyan</div>
+        <div class="org-affil">National Polytechnic University of Armenia<br>Center for Scientific Innovation and Education<br>Yerevan, Armenia</div>
+        <a href="https://scholar.google.com/citations?user=vtEfYXsAAAAJ" target="_blank" rel="noopener" class="scholar-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+          Google Scholar
+        </a>
+      </div>
+
+      <div class="organizer-card">
+        <div class="org-photo"><img src="brand_assets/photos/Sandeep_Banik.png" alt="Sandeep Banik"></div>
+        <div class="org-name">Sandeep Banik</div>
+        <div class="org-affil">University of Illinois Urbana–Champaign<br>Urbana, IL, USA</div>
+        <a href="https://scholar.google.com/citations?user=l1mM0GAAAAAJ" target="_blank" rel="noopener" class="scholar-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+          Google Scholar
+        </a>
+      </div>
+
+      <div class="organizer-card">
+        <div class="org-photo"><img src="brand_assets/photos/Tigran_Bakaryan.jpg" alt="Tigran Bakaryan"></div>
+        <div class="org-name">Tigran Bakaryan</div>
+        <div class="org-affil">Institute of Mathematics NAS RA<br>Center for Scientific Innovation and Education<br>Yerevan State University, Armenia</div>
+        <a href="https://scholar.google.com/citations?user=5rPFjx4AAAAJ" target="_blank" rel="noopener" class="scholar-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+          Google Scholar
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Partners ─────────────────────────────────────────── -->
+  <section id="partners">
+<div class="partners-row">
+      <img src="brand_assets/UIUC-Logo.png" alt="University of Illinois Urbana-Champaign" class="partner-logo">
+      <img src="brand_assets/Polytech_Logo.png" alt="National Polytechnic University of Armenia" class="partner-logo">
+      <img src="brand_assets/Math_Institute.png" alt="Institute of Mathematics NAS RA" class="partner-logo">
+      <img src="brand_assets/ysu_logo.svg" alt="Yerevan State University" class="partner-logo logo-svg">
+      <img src="brand_assets/CSIE_logo.svg" alt="CSIE" class="partner-logo logo-svg">
+    </div>
+  </section>
+
+  <!-- ─── Footer ───────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-left">
+      <div class="footer-title">Safety as a System Property</div>
+      <div class="footer-sub">23rd IFAC World Congress 2026 · August 23 · Busan, Korea</div>
+    </div>
+    <div class="footer-right">
+      <div class="footer-contact-label">Hosted at</div>
+      <div class="footer-sub">August 23, 2026 · Busan, Korea</div>
+    </div>
+  </footer>
+
+  <!-- ─── Bio Modal ───────────────────────────────────────── -->
+  <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-speaker-name">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div class="modal-photo"><img id="modal-photo-img" src="" alt=""></div>
+        <div class="modal-header-info">
+          <div class="modal-name" id="modal-speaker-name"></div>
+          <div class="modal-affil" id="modal-speaker-affil"></div>
+          <a id="modal-scholar-link" href="#" target="_blank" rel="noopener" class="modal-scholar" style="display:none">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
+            Google Scholar
+          </a>
+        </div>
+        <button class="modal-close" id="modal-close" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="modal-talk-block">
+          <div class="modal-talk-label">Talk</div>
+          <div class="modal-talk-title" id="modal-talk-title"></div>
+          <div class="modal-section-label">Abstract</div>
+          <div class="modal-abstract" id="modal-abstract"></div>
+        </div>
+        <div id="modal-bio-block">
+          <div class="modal-section-label">Biography</div>
+          <div class="modal-bio" id="modal-bio"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Scripts ──────────────────────────────────────────── -->
+  <script>
+    /* ── Nav scroll-aware theming ────────────────────────── */
+    (function() {
+      const nav = document.querySelector('nav');
+      const hero = document.getElementById('hero');
+      function update() {
+        const heroBottom = hero.getBoundingClientRect().bottom;
+        if (heroBottom <= 64) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+      }
+      window.addEventListener('scroll', update, { passive: true });
+      update();
+    })();
+
+    /* ── Hero Canvas — Autonomy Pipeline Diagram ─────────── */
+    (function() {
+      const canvas = document.getElementById('hero-canvas');
+      const ctx = canvas.getContext('2d');
+      let W, H, nodes, edges, animFrame;
+      const GOLD = 'rgba(43, 125, 212,';
+      const TEAL = 'rgba(14, 116, 144,';
+      const WHITE = 'rgba(232, 238, 248,';
+
+      function resize() {
+        W = canvas.width = canvas.offsetWidth;
+        H = canvas.height = canvas.offsetHeight;
+        initGraph();
+      }
+
+      function initGraph() {
+        nodes = [];
+        edges = [];
+
+        // Three pipeline layers: Data, Planning, Control
+        const layers = [
+          { x: 0.18, label: 'Data / Perception', color: TEAL, count: 4 },
+          { x: 0.50, label: 'Learning / Planning', color: GOLD, count: 5 },
+          { x: 0.82, label: 'Control / Actuation', color: TEAL, count: 3 },
+        ];
+
+        layers.forEach((layer, li) => {
+          for (let i = 0; i < layer.count; i++) {
+            const yFrac = 0.22 + (i / (layer.count - 1)) * 0.56;
+            nodes.push({
+              x: layer.x * W + (Math.random() - 0.5) * W * 0.06,
+              y: yFrac * H + (Math.random() - 0.5) * H * 0.04,
+              vx: (Math.random() - 0.5) * 0.18,
+              vy: (Math.random() - 0.5) * 0.18,
+              r: 3 + Math.random() * 2.5,
+              color: layer.color,
+              layer: li,
+              phase: Math.random() * Math.PI * 2,
+            });
+          }
+        });
+
+        // Edges: inter-layer (feed-forward)
+        const l0 = nodes.filter(n => n.layer === 0);
+        const l1 = nodes.filter(n => n.layer === 1);
+        const l2 = nodes.filter(n => n.layer === 2);
+
+        l0.forEach(a => {
+          const targets = l1.slice().sort(() => Math.random() - 0.5).slice(0, 2);
+          targets.forEach(b => edges.push({ a, b, phase: Math.random() * Math.PI * 2, speed: 0.4 + Math.random() * 0.6 }));
+        });
+        l1.forEach(a => {
+          const targets = l2.slice().sort(() => Math.random() - 0.5).slice(0, 2);
+          targets.forEach(b => edges.push({ a, b, phase: Math.random() * Math.PI * 2, speed: 0.4 + Math.random() * 0.6 }));
+        });
+        // Intra-layer
+        [l0, l1, l2].forEach(layer => {
+          for (let i = 0; i < layer.length - 1; i++) {
+            if (Math.random() > 0.4) {
+              edges.push({ a: layer[i], b: layer[i + 1], phase: Math.random() * Math.PI * 2, speed: 0.3, intra: true });
+            }
+          }
+        });
+      }
+
+      let t = 0;
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        t += 0.005;
+
+        // Background grid
+        ctx.strokeStyle = 'rgba(43, 125, 212, 0.08)';
+        ctx.lineWidth = 1;
+        const gs = 60;
+        for (let x = 0; x < W; x += gs) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+        }
+        for (let y = 0; y < H; y += gs) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+        }
+
+        // Edges
+        edges.forEach(e => {
+          const progress = ((t * e.speed + e.phase) % (Math.PI * 2)) / (Math.PI * 2);
+          const alpha = e.intra ? 0.08 : 0.12;
+          ctx.strokeStyle = e.intra ? `${TEAL}${alpha})` : `${GOLD}${alpha})`;
+          ctx.lineWidth = e.intra ? 0.5 : 0.8;
+          ctx.setLineDash([]);
+          ctx.beginPath();
+          ctx.moveTo(e.a.x, e.a.y);
+          ctx.lineTo(e.b.x, e.b.y);
+          ctx.stroke();
+
+          // Animated pulse along edge
+          if (!e.intra) {
+            const px = e.a.x + (e.b.x - e.a.x) * progress;
+            const py = e.a.y + (e.b.y - e.a.y) * progress;
+            const grad = ctx.createRadialGradient(px, py, 0, px, py, 6);
+            grad.addColorStop(0, `${GOLD}0.8)`);
+            grad.addColorStop(1, `${GOLD}0)`);
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(px, py, 6, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+
+        // Nodes
+        nodes.forEach(n => {
+          const pulse = Math.sin(t * 1.2 + n.phase) * 0.4 + 0.6;
+          // Outer glow
+          const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 4);
+          glow.addColorStop(0, `${n.color}${0.25 * pulse})`);
+          glow.addColorStop(1, `${n.color}0)`);
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r * 4, 0, Math.PI * 2);
+          ctx.fill();
+          // Core
+          ctx.fillStyle = `${n.color}${0.7 + 0.3 * pulse})`;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+          ctx.fill();
+          // Drift
+          n.x += n.vx; n.y += n.vy;
+          const cx = n.layer === 0 ? 0.18 : n.layer === 1 ? 0.50 : 0.82;
+          if (Math.abs(n.x - cx * W) > W * 0.1) n.vx *= -1;
+          if (n.y < H * 0.15 || n.y > H * 0.85) n.vy *= -1;
+        });
+
+
+        animFrame = requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      draw();
+    })();
+
+    /* ── Scroll Reveal ───────────────────────────────────── */
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => observer.observe(el));
+
+    /* ── Stagger child reveals in grids ─────────────────── */
+    document.querySelectorAll('.speakers-grid .speaker-card, .organizers-grid .organizer-card').forEach((card, i) => {
+      card.style.transitionDelay = `${i * 55}ms`;
+    });
+
+    /* ── Modal (bio from speaker cards, talk from schedule) ── */
+    const backdrop   = document.getElementById('modal-backdrop');
+    const modalEl    = document.getElementById('modal');
+    const closeBtn   = document.getElementById('modal-close');
+    const talkBlock  = document.getElementById('modal-talk-block');
+    const bioBlock   = document.getElementById('modal-bio-block');
+
+    function populateModalHeader(photo, name, affil, scholar) {
+      document.getElementById('modal-photo-img').src = photo || '';
+      document.getElementById('modal-photo-img').alt = name  || '';
+      document.getElementById('modal-speaker-name').textContent  = name  || '';
+      document.getElementById('modal-speaker-affil').textContent = affil || '';
+      const scholarEl = document.getElementById('modal-scholar-link');
+      if (scholar) {
+        scholarEl.href = scholar;
+        scholarEl.style.display = 'inline-flex';
+      } else {
+        scholarEl.style.display = 'none';
+      }
+    }
+
+    function openBioModal(card) {
+      populateModalHeader(card.dataset.photo, card.dataset.name, card.dataset.affil, card.dataset.scholar);
+      document.getElementById('modal-bio').textContent = card.dataset.bio || '';
+      talkBlock.style.display = 'none';
+      bioBlock.style.display  = 'block';
+      modalEl.scrollTop = 0;
+      backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+
+    function openTalkModal(row) {
+      populateModalHeader(row.dataset.photo, row.dataset.speaker, row.dataset.affil, null);
+      document.getElementById('modal-talk-title').textContent = row.dataset.talk || 'TBA';
+      document.getElementById('modal-abstract').textContent   = row.dataset.abstract || '';
+      talkBlock.style.display = 'block';
+      bioBlock.style.display  = 'none';
+      modalEl.scrollTop = 0;
+      backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+
+    function closeModal() {
+      backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Wire up card-level scholar links from data-scholar
+    document.querySelectorAll('.speaker-card').forEach(card => {
+      const link = card.querySelector('.speaker-scholar');
+      if (link && card.dataset.scholar) link.href = card.dataset.scholar;
+    });
+
+    // Speaker cards → bio modal
+    document.querySelectorAll('.speaker-card').forEach(card => {
+      card.addEventListener('click', () => openBioModal(card));
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBioModal(card); }
+      });
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `Read bio: ${card.dataset.name}`);
+    });
+
+    // Schedule talk rows → talk abstract modal
+    document.querySelectorAll('.sched-talk[data-talk]').forEach(row => {
+      row.addEventListener('click', () => openTalkModal(row));
+      row.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openTalkModal(row); }
+      });
+      row.setAttribute('tabindex', '0');
+      row.setAttribute('role', 'button');
+      row.setAttribute('aria-label', `View abstract: ${row.dataset.talk}`);
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  </script>
+</body>
+</html>
