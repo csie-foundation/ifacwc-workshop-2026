@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node serve.mjs)",
+      "Bash(python3 -m http.server 3000)",
+      "Bash(echo \"Server PID: $!\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \" | photos: %{http_code}\" http://localhost:3000/brand_assets/photos/Naira_Hovakimyan.jpg)",
+      "Bash(grep -n \"rgba\\\\|#[0-9A-Fa-f]\\\\{3,6\\\\}\\\\b\" \"c:/Users/astgh/Desktop/Workshop/index.html\")"
+    ]
+  }
+}
