@@ -305,6 +305,26 @@
       border-color: rgba(43, 125, 212, 0.58);
       transform: translateY(-2px);
     }
+    .btn-register {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      background: var(--orange);
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      transition: background 0.2s, transform 0.2s var(--ease-spring), box-shadow 0.2s;
+    }
+    .btn-register:hover {
+      background: #D95020;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(192, 64, 16, 0.40);
+    }
+    .btn-register:active { transform: translateY(0); }
     .hero-ifac-logo {
       position: absolute;
       bottom: 3rem;
@@ -1041,7 +1061,7 @@
       <li><a href="#speakers">Speakers</a></li>
       <li><a href="#organizers">Organizers</a></li>
     </ul>
-    <a href="#organizers" class="nav-cta">Organizers</a>
+    <a href="https://www.ifac2026.org/fairContents.do?FAIRMENU_IDX=21697&hl=ENG" class="nav-cta" target="_blank" rel="noopener">Register</a>
   </nav>
 
   <!-- ─── Hero ────────────────────────────────────────────── -->
@@ -1086,6 +1106,12 @@
         <a href="#speakers" class="btn-secondary">
           Meet the Speakers
         </a>
+        <a href="https://www.ifac2026.org/fairContents.do?FAIRMENU_IDX=21697&hl=ENG" class="btn-register" target="_blank" rel="noopener">
+          Register Now
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     </div>
 
@@ -1094,7 +1120,6 @@
     </div>
 
     <div class="hero-scroll-hint">
-      <span>Scroll</span>
       <div class="scroll-line"></div>
     </div>
   </section>

@@ -6,7 +6,15 @@
       "Bash(echo \"Server PID: $!\")",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
       "Bash(curl -s -o /dev/null -w \" | photos: %{http_code}\" http://localhost:3000/brand_assets/photos/Naira_Hovakimyan.jpg)",
-      "Bash(grep -n \"rgba\\\\|#[0-9A-Fa-f]\\\\{3,6\\\\}\\\\b\" \"c:/Users/astgh/Desktop/Workshop/index.html\")"
+      "Bash(grep -n \"rgba\\\\|#[0-9A-Fa-f]\\\\{3,6\\\\}\\\\b\" \"c:/Users/astgh/Desktop/Workshop/index.html\")",
+      "Bash(node screenshot.mjs http://localhost:3000/posters.html posters-preview)",
+      "PowerShell(ls \"C:\\\\Program Files\\\\nodejs\\\\node.exe\" -ErrorAction SilentlyContinue; ls \"C:\\\\Program Files \\(x86\\)\\\\nodejs\\\\node.exe\" -ErrorAction SilentlyContinue; ls \"$env:APPDATA\\\\npm\\\\node.exe\" -ErrorAction SilentlyContinue; ls \"$env:NVM_HOME\" -ErrorAction SilentlyContinue; Get-ChildItem \"C:\\\\Users\\\\astgh\\\\AppData\\\\Roaming\\\\nvm\" -ErrorAction SilentlyContinue | Select-Object -First 5)",
+      "PowerShell($env:PATH -split \";\")",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(python -c \"from PIL import Image; print\\('Pillow OK'\\); img = Image.new\\('RGB',\\(10,10\\)\\); img.save\\('C:/tmp_test.webp'\\); print\\('WebP write OK'\\)\" 2>&1)",
+      "PowerShell(python -c \"import PIL; print\\('Pillow version:', PIL.__version__\\)\" 2>&1)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\astgh\\\\Dropbox\\\\CSIE\\\\Grants\\\\Integration\\\\Travel\\\\Korea 2026\\\\Workshop\\\\poster_exports\\\\\" | Where-Object { $_.Extension -in @\\('.webp','.apng'\\) } | Select-Object Name, @{N='KB';E={[math]::Round\\($_.Length/1KB\\)}})",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\astgh\\\\Dropbox\\\\CSIE\\\\Grants\\\\Integration\\\\Travel\\\\Korea 2026\\\\Workshop\\\\poster_exports\\\\\" | Select-Object Name, @{N='KB';E={[math]::Round\\($_.Length/1KB\\)}})"
     ]
   }
 }

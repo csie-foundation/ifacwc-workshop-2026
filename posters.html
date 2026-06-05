@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speaker Posters — Safety as a System Property</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep:    #04090F;
+      --bg-dark:    #080F1C;
+      --gold:       #1A5FA8;
+      --gold-light: #2B7DD4;
+      --gold-bright:#6AB4F0;
+      --teal:       #0E7490;
+      --text-hi:    #EBF1FB;
+      --text-md:    #A8C4E0;
+      --text-lo:    #58789E;
+      --border:     rgba(43,125,212,0.18);
+      --font-disp:  'Cormorant Garant', Georgia, serif;
+      --font-body:  'DM Sans', system-ui, sans-serif;
+      --font-mono:  'DM Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #020609;
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+    }
+    .page-header {
+      padding: 2.5rem 4rem 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header h1 {
+      font-family: var(--font-disp);
+      font-weight: 400;
+      font-size: 1.5rem;
+      color: var(--text-hi);
+      margin-bottom: 0.3rem;
+    }
+    .page-header p {
+      font-size: 0.75rem;
+      color: var(--text-lo);
+      font-family: var(--font-mono);
+      letter-spacing: 0.06em;
+    }
+    .posters-container {
+      padding: 3rem 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 5rem;
+      align-items: center;
+    }
+    .poster-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .poster-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-lo);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       POSTER  1080 × 1080
+    ══════════════════════════════════════════════════ */
+    .poster {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-deep);
+      flex-shrink: 0;
+    }
+
+    /* — Grain ——————————————————————————————————————— */
+    .poster::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.028;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    /* — Atmosphere layers ——————————————————————————— */
+    .p-atm {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        /* upper-right warm blue glow */
+        radial-gradient(ellipse 75% 55% at 80% 8%,  rgba(43,125,212,0.28) 0%, transparent 60%),
+        /* left teal breath */
+        radial-gradient(ellipse 50% 45% at -5% 60%, rgba(14,116,144,0.13) 0%, transparent 55%),
+        /* bottom vignette */
+        radial-gradient(ellipse 120% 50% at 50% 108%, rgba(4,9,15,1) 0%, transparent 55%),
+        /* centre photo bloom — placed at 50% 42% to sit behind photo */
+        radial-gradient(ellipse 70% 60% at 50% 42%,  rgba(26,95,168,0.14) 0%, transparent 65%);
+    }
+
+    /* — Subtle grid ————————————————————————————————— */
+    .p-grid {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background-image:
+        linear-gradient(rgba(43,125,212,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(43,125,212,0.035) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+
+    /* — Diagonal light streak ——————————————————————— */
+    .p-streak {
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 55%;
+      height: 55%;
+      background: radial-gradient(ellipse at 70% 30%, rgba(91,164,240,0.07) 0%, transparent 65%);
+      transform: rotate(-18deg);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* — Top accent line ————————————————————————————— */
+    .p-topline {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(to right,
+        transparent 0%,
+        var(--gold) 15%,
+        var(--gold-bright) 40%,
+        var(--gold-light) 60%,
+        rgba(14,116,144,0.6) 85%,
+        transparent 100%);
+      z-index: 10;
+    }
+
+    /* — Corner marks ————————————————————————————————*/
+    .p-corner {
+      position: absolute;
+      width: 32px; height: 32px;
+      z-index: 10;
+    }
+    .p-corner--tl { top: 32px; left: 32px;
+      border-top: 1.5px solid rgba(91,164,240,0.5);
+      border-left: 1.5px solid rgba(91,164,240,0.5); }
+    .p-corner--tr { top: 32px; right: 32px;
+      border-top: 1.5px solid rgba(91,164,240,0.5);
+      border-right: 1.5px solid rgba(91,164,240,0.5); }
+    .p-corner--bl { bottom: 32px; left: 32px;
+      border-bottom: 1.5px solid rgba(91,164,240,0.5);
+      border-left: 1.5px solid rgba(91,164,240,0.5); }
+    .p-corner--br { bottom: 32px; right: 32px;
+      border-bottom: 1.5px solid rgba(91,164,240,0.5);
+      border-right: 1.5px solid rgba(91,164,240,0.5); }
+
+    /* — Content shell ——————————————————————————————— */
+    .p-content {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      padding: 56px 68px 52px;
+    }
+
+    /* — Top bar ————————————————————————————————————— */
+    .p-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      margin-bottom: 36px;
+    }
+    .p-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 16px 7px 11px;
+      background: rgba(26,95,168,0.13);
+      border: 1px solid rgba(91,164,240,0.25);
+      border-radius: 100px;
+    }
+    .p-badge-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--gold-bright);
+      box-shadow: 0 0 10px rgba(106,180,240,0.9), 0 0 20px rgba(43,125,212,0.5);
+      flex-shrink: 0;
+    }
+    .p-badge-text {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #7AAEE8;
+    }
+    .p-ifac-logo {
+      height: 72px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 12px rgba(43,125,212,0.35)) brightness(1.05);
+      flex-shrink: 0;
+    }
+
+    /* — Photo area ——————————————————————————————————— */
+    .p-photo-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      justify-content: center;
+      padding-bottom: 8px;
+    }
+
+    .p-photo-wrap {
+      position: relative;
+      margin-bottom: 38px;
+      flex-shrink: 0;
+    }
+    /* Outer halo glow */
+    .p-photo-halo {
+      position: absolute;
+      inset: -55px;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        rgba(43,125,212,0.22) 20%,
+        rgba(26,95,168,0.09) 55%,
+        transparent 72%
+      );
+      pointer-events: none;
+    }
+    /* Outer dotted ring */
+    .p-photo-ring-outer {
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 1px solid rgba(91,164,240,0.22);
+      pointer-events: none;
+    }
+    /* Gradient border ring */
+    .p-photo-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 90deg,
+        rgba(91,164,240,0.80) 0deg,
+        rgba(26,95,168,0.50) 90deg,
+        rgba(14,116,144,0.40) 180deg,
+        rgba(43,125,212,0.60) 270deg,
+        rgba(91,164,240,0.80) 360deg
+      );
+      pointer-events: none;
+    }
+    /* White mask to create ring illusion */
+    .p-photo-ring-mask {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .p-photo-ring-mask::before {
+      content: '';
+      width: calc(100% - 4px);
+      height: calc(100% - 4px);
+      border-radius: 50%;
+      background: var(--bg-deep);
+    }
+
+    .p-photo {
+      width: 330px;
+      height: 330px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid rgba(91,164,240,0.38);
+      box-shadow:
+        0 0 0 1px rgba(26,95,168,0.15),
+        inset 0 0 30px rgba(0,0,0,0.4),
+        0 12px 60px rgba(0,0,0,0.70),
+        0 0 100px rgba(26,95,168,0.12);
+      position: relative;
+      z-index: 2;
+    }
+    .p-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    /* — Name & affiliation ——————————————————————————— */
+    .p-name {
+      font-family: var(--font-disp);
+      font-weight: 500;
+      font-size: 62px;
+      line-height: 1.0;
+      letter-spacing: -0.025em;
+      color: var(--text-hi);
+      text-align: center;
+      margin-bottom: 14px;
+      text-shadow: 0 2px 30px rgba(43,125,212,0.20);
+    }
+    .p-affil {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-lo);
+      letter-spacing: 0.03em;
+      text-align: center;
+      line-height: 1.5;
+      margin-bottom: 46px;
+    }
+
+    /* — Divider ———————————————————————————————————— */
+    .p-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 auto 36px;
+      flex-shrink: 0;
+    }
+    .p-divider-line {
+      width: 56px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(91,164,240,0.5));
+    }
+    .p-divider-line:last-child {
+      background: linear-gradient(to left, transparent, rgba(91,164,240,0.5));
+    }
+    .p-divider-diamond {
+      width: 5px; height: 5px;
+      background: var(--gold-bright);
+      transform: rotate(45deg);
+      box-shadow: 0 0 8px rgba(106,180,240,0.7);
+      flex-shrink: 0;
+    }
+
+    /* — Talk ————————————————————————————————————————— */
+    .p-talk-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-bright);
+      text-align: center;
+      margin-bottom: 16px;
+      flex-shrink: 0;
+    }
+    .p-talk-title {
+      font-family: var(--font-disp);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 1.42;
+      color: #C4DCF8;
+      text-align: center;
+      max-width: 780px;
+      letter-spacing: 0.01em;
+      flex-shrink: 0;
+    }
+
+    /* — Footer ——————————————————————————————————————— */
+    .p-footer {
+      flex-shrink: 0;
+      border-top: 1px solid rgba(43,125,212,0.20);
+      padding-top: 26px;
+      margin-top: auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .p-footer-left {}
+    .p-footer-title {
+      font-family: var(--font-disp);
+      font-weight: 500;
+      font-size: 21px;
+      color: var(--text-hi);
+      letter-spacing: -0.01em;
+      margin-bottom: 5px;
+    }
+    .p-footer-sub {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-lo);
+    }
+    .p-footer-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+    }
+    .p-footer-date {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      color: var(--gold-bright);
+      letter-spacing: 0.05em;
+    }
+    .p-footer-location {
+      font-size: 13px;
+      color: var(--text-lo);
+      letter-spacing: 0.07em;
+    }
+
+    /* — Utility: speaker label top-right ——————————— */
+    .p-speaker-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(91,164,240,0.65);
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Speaker Posters — Safety as a System Property</h1>
+  <p>IFAC World Congress 2026 · Busan · August 23 · 1080×1080 LinkedIn format</p>
+</div>
+
+<div class="posters-container">
+
+<!-- ─────────────────────────────────────────────────────── -->
+<!-- MACRO: each poster shares the same structure           -->
+<!-- ─────────────────────────────────────────────────────── -->
+
+  <!-- 01 · Navid Azizan -->
+  <div class="poster-wrap">
+    <div class="poster-label">01 / Navid Azizan</div>
+    <div class="poster">
+      <div class="p-atm"></div>
+      <div class="p-grid"></div>
+      <div class="p-streak"></div>
+      <div class="p-topline"></div>
+      <div class="p-corner p-corner--tl"></div>
+      <div class="p-corner p-corner--tr"></div>
+      <div class="p-corner p-corner--bl"></div>
+      <div class="p-corner p-corner--br"></div>
+      <div class="p-content">
+        <div class="p-topbar">
+          <div class="p-badge">
+            <div class="p-badge-dot"></div>
+            <span class="p-badge-text">IFAC World Congress 2026 · Busan</span>
+          </div>
+          <img class="p-ifac-logo" src="assets/IFAC_2026_Logo_gif.gif" alt="IFAC 2026">
+        </div>
+        <div class="p-photo-area">
+          <div class="p-photo-wrap">
+            <div class="p-photo-halo"></div>
+            <div class="p-photo-ring"></div>
+            <div class="p-photo-ring-mask"></div>
+            <div class="p-photo-ring-outer"></div>
+            <div class="p-photo"><img src="assets/photos/Navid_Azizan.jpg" alt="Navid Azizan"></div>
+          </div>
+          <div class="p-name">Navid Azizan</div>
+          <div class="p-affil">Massachusetts Institute of Technology</div>
+          <div class="p-divider">
+            <div class="p-divider-line"></div>
+            <div class="p-divider-diamond"></div>
+            <div class="p-divider-line"></div>
+          </div>
+          <div class="p-talk-label">Invited Talk</div>
+          <div class="p-talk-title">Towards Safe and Efficient AI-Enabled Autonomy</div>
+        </div>
+        <div class="p-footer">
+          <div class="p-footer-left">
+            <div class="p-footer-title">Safety as a System Property</div>
+            <div class="p-footer-sub">From Control Design to Data-Driven Autonomy</div>
+          </div>
+          <div class="p-footer-right">
+            <div class="p-footer-date">August 23, 2026</div>
+            <div class="p-footer-location">Busan, Korea</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 · Lars Lindemann -->
+  <div class="poster-wrap">
+    <div class="poster-label">02 / Lars Lindemann</div>
+    <div class="poster">
+      <div class="p-atm"></div>
+      <div class="p-grid"></div>
+      <div class="p-streak"></div>
+      <div class="p-topline"></div>
+      <div class="p-corner p-corner--tl"></div>
+      <div class="p-corner p-corner--tr"></div>
+      <div class="p-corner p-corner--bl"></div>
+      <div class="p-corner p-corner--br"></div>
+      <div class="p-content">
+        <div class="p-topbar">
+          <div class="p-badge">
+            <div class="p-badge-dot"></div>
+            <span class="p-badge-text">IFAC World Congress 2026 · Busan</span>
+          </div>
+          <img class="p-ifac-logo" src="assets/IFAC_2026_Logo_gif.gif" alt="IFAC 2026">
+        </div>
+        <div class="p-photo-area">
+          <div class="p-photo-wrap">
+            <div class="p-photo-halo"></div>
+            <div class="p-photo-ring"></div>
+            <div class="p-photo-ring-mask"></div>
+            <div class="p-photo-ring-outer"></div>
+            <div class="p-photo"><img src="assets/photos/Lars_Lindemann.jpg" alt="Lars Lindemann"></div>
+          </div>
+          <div class="p-name">Lars Lindemann</div>
+          <div class="p-affil">ETH Zürich</div>
+          <div class="p-divider">
+            <div class="p-divider-line"></div>
+            <div class="p-divider-diamond"></div>
+            <div class="p-divider-line"></div>
+          </div>
+          <div class="p-talk-label">Invited Talk</div>
+          <div class="p-talk-title">When Control Changes the Data: Safety under Interaction-Driven Distribution Shifts</div>
+        </div>
+        <div class="p-footer">
+          <div class="p-footer-left">
+            <div class="p-footer-title">Safety as a System Property</div>
+            <div class="p-footer-sub">From Control Design to Data-Driven Autonomy</div>
+          </div>
+          <div class="p-footer-right">
+            <div class="p-footer-date">August 23, 2026</div>
+            <div class="p-footer-location">Busan, Korea</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 · Naira Hovakimyan -->
+  <div class="poster-wrap">
+    <div class="poster-label">03 / Naira Hovakimyan</div>
+    <div class="poster">
+      <div class="p-atm"></div>
+      <div class="p-grid"></div>
+      <div class="p-streak"></div>
+      <div class="p-topline"></div>
+      <div class="p-corner p-corner--tl"></div>
+      <div class="p-corner p-corner--tr"></div>
+      <div class="p-corner p-corner--bl"></div>
+      <div class="p-corner p-corner--br"></div>
+      <div class="p-content">
+        <div class="p-topbar">
+          <div class="p-badge">
+            <div class="p-badge-dot"></div>
+            <span class="p-badge-text">IFAC World Congress 2026 · Busan</span>
+          </div>
+          <img class="p-ifac-logo" src="assets/IFAC_2026_Logo_gif.gif" alt="IFAC 2026">
+        </div>
+        <div class="p-photo-area">
+          <div class="p-photo-wrap">
+            <div class="p-photo-halo"></div>
+            <div class="p-photo-ring"></div>
+            <div class="p-photo-ring-mask"></div>
+            <div class="p-photo-ring-outer"></div>
+            <div class="p-photo"><img src="assets/photos/Naira_Hovakimyan.jpg" alt="Naira Hovakimyan"></div>
+          </div>
+          <div class="p-name">Naira Hovakimyan</div>
+          <div class="p-affil">University of Illinois Urbana–Champaign</div>
+          <div class="p-divider">
+            <div class="p-divider-line"></div>
+            <div class="p-divider-diamond"></div>
+            <div class="p-divider-line"></div>
+          </div>
+          <div class="p-talk-label">Invited Talk</div>
+          <div class="p-talk-title">Ontological Robustness for Certification of Layered Autonomy Architectures</div>
+        </div>
+        <div class="p-footer">
+          <div class="p-footer-left">
+            <div class="p-footer-title">Safety as a System Property</div>
+            <div class="p-footer-sub">From Control Design to Data-Driven Autonomy</div>
+          </div>
+          <div class="p-footer-right">
+            <div class="p-footer-date">August 23, 2026</div>
+            <div class="p-footer-location">Busan, Korea</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 · Astghik Hakobyan -->
+  <div class="poster-wrap">
+    <div class="poster-label">04 / Astghik Hakobyan</div>
+    <div class="poster">
+      <div class="p-atm"></div>
+      <div class="p-grid"></div>
+      <div class="p-streak"></div>
+      <div class="p-topline"></div>
+      <div class="p-corner p-corner--tl"></div>
+      <div class="p-corner p-corner--tr"></div>
+      <div class="p-corner p-corner--bl"></div>
+      <div class="p-corner p-corner--br"></div>
+      <div class="p-content">
+        <div class="p-topbar">
+          <div class="p-badge">
+            <div class="p-badge-dot"></div>
+            <span class="p-badge-text">IFAC World Congress 2026 · Busan</span>
+          </div>
+          <img class="p-ifac-logo" src="assets/IFAC_2026_Logo_gif.gif" alt="IFAC 2026">
+        </div>
+        <div class="p-photo-area">
+          <div class="p-photo-wrap">
+            <div class="p-photo-halo"></div>
+            <div class="p-photo-ring"></div>
+            <div class="p-photo-ring-mask"></div>
+            <div class="p-photo-ring-outer"></div>
+            <div class="p-photo"><img src="assets/photos/Astghik_Hakobyan.jpg" alt="Astghik Hakobyan"></div>
+          </div>
+          <div class="p-name">Astghik Hakobyan</div>
+          <div class="p-affil">National Polytechnic University of Armenia · CSIE</div>
+          <div class="p-divider">
+            <div class="p-divider-line"></div>
+            <div class="p-divider-diamond"></div>
+            <div class="p-divider-line"></div>
+          </div>
+          <div class="p-talk-label">Invited Talk</div>
+          <div class="p-talk-title">Distributionally Robust Planning with L₁ Adaptive Control</div>
+        </div>
+        <div class="p-footer">
+          <div class="p-footer-left">
+            <div class="p-footer-title">Safety as a System Property</div>
+            <div class="p-footer-sub">From Control Design to Data-Driven Autonomy</div>
+          </div>
+          <div class="p-footer-right">
+            <div class="p-footer-date">August 23, 2026</div>
+            <div class="p-footer-location">Busan, Korea</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 · Yongxin Chen -->
+  <div class="poster-wrap">
+    <div class="poster-label">05 / Yongxin Chen</div>
+    <div class="poster">
+      <div class="p-atm"></div>
+      <div class="p-grid"></div>
+      <div class="p-streak"></div>
+      <div class="p-topline"></div>
+      <div class="p-corner p-corner--tl"></div>
+      <div class="p-corner p-corner--tr"></div>
+      <div class="p-corner p-corner--bl"></div>
+      <div class="p-corner p-corner--br"></div>
+      <div class="p-content">
+        <div class="p-topbar">
+          <div class="p-badge">
+            <div class="p-badge-dot"></div>
+            <span class="p-badge-text">IFAC World Congress 2026 · Busan</span>
+          </div>
+          <img class="p-ifac-logo" src="assets/IFAC_2026_Logo_gif.gif" alt="IFAC 2026">
+        </div>
+        <div class="p-photo-area">
+          <div class="p-photo-wrap">
+            <div class="p-photo-halo"></div>
+            <div class="p-photo-ring"></div>
+            <div class="p-photo-ring-mask"></div>
+            <div class="p-photo-ring-outer"></div>
+            <div class="p-photo"><img src="assets/photos/Yongxin_Chen.jpg" alt="Yongxin Chen"></div>
+          </div>
+          <div class="p-name">Yongxin Chen</div>
+          <div class="p-affil">Georgia Institute of Technology</div>
+          <div class="p-divider">
+            <div class="p-divider-line"></div>
+            <div class="p-divider-diamond"></div>
+            <div class="p-divider-line"></div>
+          </div>
+          <div class="p-talk-label">Invited Talk</div>
+          <div class="p-talk-title">Safety Assurance of Stochastic Systems</div>
+        </div>
+        <div class="p-footer">
+          <div class="p-footer-left">
+            <div class="p-footer-title">Safety as a System Property</div>
+            <div class="p-footer-sub">From Control Design to Data-Driven Autonomy</div>
+          </div>
+          <div class="p-footer-right">
+            <div class="p-footer-date">August 23, 2026</div>
+            <div class="p-footer-location">Busan, Korea</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 · Calin Belta -->
+  <div class="poster-wrap">
+    <div class="poster-label">06 / Calin Belta</div>
+    <div class="poster">
+      <div class="p-atm"></div>
+      <div class="p-grid"></div>
+      <div class="p-streak"></div>
+      <div class="p-topline"></div>
+      <div class="p-corner p-corner--tl"></div>
+      <div class="p-corner p-corner--tr"></div>
+      <div class="p-corner p-corner--bl"></div>
+      <div class="p-corner p-corner--br"></div>
+      <div class="p-content">
+        <div class="p-topbar">
+          <div class="p-badge">
+            <div class="p-badge-dot"></div>
+            <span class="p-badge-text">IFAC World Congress 2026 · Busan</span>
+          </div>
+          <img class="p-ifac-logo" src="assets/IFAC_2026_Logo_gif.gif" alt="IFAC 2026">
+        </div>
+        <div class="p-photo-area">
+          <div class="p-photo-wrap">
+            <div class="p-photo-halo"></div>
+            <div class="p-photo-ring"></div>
+            <div class="p-photo-ring-mask"></div>
+            <div class="p-photo-ring-outer"></div>
+            <div class="p-photo"><img src="assets/photos/Calin_Belta.png" alt="Calin Belta" style="object-position: center center;"></div>
+          </div>
+          <div class="p-name">Calin Belta</div>
+          <div class="p-affil">University of Maryland</div>
+          <div class="p-divider">
+            <div class="p-divider-line"></div>
+            <div class="p-divider-diamond"></div>
+            <div class="p-divider-line"></div>
+          </div>
+          <div class="p-talk-label">Invited Talk</div>
+          <div class="p-talk-title">Formal Methods for Safe and Interpretable Control</div>
+        </div>
+        <div class="p-footer">
+          <div class="p-footer-left">
+            <div class="p-footer-title">Safety as a System Property</div>
+            <div class="p-footer-sub">From Control Design to Data-Driven Autonomy</div>
+          </div>
+          <div class="p-footer-right">
+            <div class="p-footer-date">August 23, 2026</div>
+            <div class="p-footer-location">Busan, Korea</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 · Tigran Bakaryan -->
+  <div class="poster-wrap">
+    <div class="poster-label">07 / Tigran Bakaryan</div>
+    <div class="poster">
+      <div class="p-atm"></div>
+      <div class="p-grid"></div>
+      <div class="p-streak"></div>
+      <div class="p-topline"></div>
+      <div class="p-corner p-corner--tl"></div>
+      <div class="p-corner p-corner--tr"></div>
+      <div class="p-corner p-corner--bl"></div>
+      <div class="p-corner p-corner--br"></div>
+      <div class="p-content">
+        <div class="p-topbar">
+          <div class="p-badge">
+            <div class="p-badge-dot"></div>
+            <span class="p-badge-text">IFAC World Congress 2026 · Busan</span>
+          </div>
+          <img class="p-ifac-logo" src="assets/IFAC_2026_Logo_gif.gif" alt="IFAC 2026">
+        </div>
+        <div class="p-photo-area">
+          <div class="p-photo-wrap">
+            <div class="p-photo-halo"></div>
+            <div class="p-photo-ring"></div>
+            <div class="p-photo-ring-mask"></div>
+            <div class="p-photo-ring-outer"></div>
+            <div class="p-photo"><img src="assets/photos/Tigran_Bakaryan.jpg" alt="Tigran Bakaryan"></div>
+          </div>
+          <div class="p-name">Tigran Bakaryan</div>
+          <div class="p-affil">Institute of Mathematics NAS RA · Yerevan State University</div>
+          <div class="p-divider">
+            <div class="p-divider-line"></div>
+            <div class="p-divider-diamond"></div>
+            <div class="p-divider-line"></div>
+          </div>
+          <div class="p-talk-label">Invited Talk</div>
+          <div class="p-talk-title">Fourier-Based Optimization for Constraint-Aware and Safety-Critical Optimal Control</div>
+        </div>
+        <div class="p-footer">
+          <div class="p-footer-left">
+            <div class="p-footer-title">Safety as a System Property</div>
+            <div class="p-footer-sub">From Control Design to Data-Driven Autonomy</div>
+          </div>
+          <div class="p-footer-right">
+            <div class="p-footer-date">August 23, 2026</div>
+            <div class="p-footer-location">Busan, Korea</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 · Gioele Zardini -->
+  <div class="poster-wrap">
+    <div class="poster-label">08 / Gioele Zardini</div>
+    <div class="poster">
+      <div class="p-atm"></div>
+      <div class="p-grid"></div>
+      <div class="p-streak"></div>
+      <div class="p-topline"></div>
+      <div class="p-corner p-corner--tl"></div>
+      <div class="p-corner p-corner--tr"></div>
+      <div class="p-corner p-corner--bl"></div>
+      <div class="p-corner p-corner--br"></div>
+      <div class="p-content">
+        <div class="p-topbar">
+          <div class="p-badge">
+            <div class="p-badge-dot"></div>
+            <span class="p-badge-text">IFAC World Congress 2026 · Busan</span>
+          </div>
+          <img class="p-ifac-logo" src="assets/IFAC_2026_Logo_gif.gif" alt="IFAC 2026">
+        </div>
+        <div class="p-photo-area">
+          <div class="p-photo-wrap">
+            <div class="p-photo-halo"></div>
+            <div class="p-photo-ring"></div>
+            <div class="p-photo-ring-mask"></div>
+            <div class="p-photo-ring-outer"></div>
+            <div class="p-photo"><img src="assets/photos/Gioele_Zardini.png" alt="Gioele Zardini"></div>
+          </div>
+          <div class="p-name">Gioele Zardini</div>
+          <div class="p-affil">Massachusetts Institute of Technology</div>
+          <div class="p-divider">
+            <div class="p-divider-line"></div>
+            <div class="p-divider-diamond"></div>
+            <div class="p-divider-line"></div>
+          </div>
+          <div class="p-talk-label">Invited Talk</div>
+          <div class="p-talk-title">Compositional Design of Society-Critical Systems: From Autonomy to Future Mobility</div>
+        </div>
+        <div class="p-footer">
+          <div class="p-footer-left">
+            <div class="p-footer-title">Safety as a System Property</div>
+            <div class="p-footer-sub">From Control Design to Data-Driven Autonomy</div>
+          </div>
+          <div class="p-footer-right">
+            <div class="p-footer-date">August 23, 2026</div>
+            <div class="p-footer-location">Busan, Korea</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 · Karl H. Johansson -->
+  <div class="poster-wrap">
+    <div class="poster-label">09 / Karl H. Johansson</div>
+    <div class="poster">
+      <div class="p-atm"></div>
+      <div class="p-grid"></div>
+      <div class="p-streak"></div>
+      <div class="p-topline"></div>
+      <div class="p-corner p-corner--tl"></div>
+      <div class="p-corner p-corner--tr"></div>
+      <div class="p-corner p-corner--bl"></div>
+      <div class="p-corner p-corner--br"></div>
+      <div class="p-content">
+        <div class="p-topbar">
+          <div class="p-badge">
+            <div class="p-badge-dot"></div>
+            <span class="p-badge-text">IFAC World Congress 2026 · Busan</span>
+          </div>
+          <img class="p-ifac-logo" src="assets/IFAC_2026_Logo_gif.gif" alt="IFAC 2026">
+        </div>
+        <div class="p-photo-area">
+          <div class="p-photo-wrap">
+            <div class="p-photo-halo"></div>
+            <div class="p-photo-ring"></div>
+            <div class="p-photo-ring-mask"></div>
+            <div class="p-photo-ring-outer"></div>
+            <div class="p-photo"><img src="assets/photos/Karl_Johansson.jpg" alt="Karl H. Johansson"></div>
+          </div>
+          <div class="p-name">Karl H. Johansson</div>
+          <div class="p-affil">KTH Royal Institute of Technology</div>
+          <div class="p-divider">
+            <div class="p-divider-line"></div>
+            <div class="p-divider-diamond"></div>
+            <div class="p-divider-line"></div>
+          </div>
+          <div class="p-talk-label">Invited Talk</div>
+          <div class="p-talk-title">Safe Learning and Control of Mixed-Autonomy Traffic</div>
+        </div>
+        <div class="p-footer">
+          <div class="p-footer-left">
+            <div class="p-footer-title">Safety as a System Property</div>
+            <div class="p-footer-sub">From Control Design to Data-Driven Autonomy</div>
+          </div>
+          <div class="p-footer-right">
+            <div class="p-footer-date">August 23, 2026</div>
+            <div class="p-footer-location">Busan, Korea</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /posters-container -->
+
+<script>
+  /* ?id=N  →  show only poster N, strip chrome, zero padding */
+  (function () {
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (!id) return;
+    const n = parseInt(id, 10);
+
+    /* inject a <style> so hiding is synchronous before first paint */
+    const params = new URLSearchParams(window.location.search);
+    const nologo = params.get('nologin');
+    const style = document.createElement('style');
+    style.textContent = `
+      .page-header, .poster-label { display: none !important; }
+      .posters-container { padding: 0 !important; gap: 0 !important; }
+      body { background: #04090F !important; margin: 0 !important; overflow: hidden !important; }
+      ${nologo ? '.p-ifac-logo { visibility: hidden !important; }' : ''}
+    `;
+    document.head.appendChild(style);
+
+    document.querySelectorAll('.poster-wrap').forEach((el, i) => {
+      if (i + 1 !== n) el.style.display = 'none';
+    });
+  })();
+</script>
+</body>
+</html>
