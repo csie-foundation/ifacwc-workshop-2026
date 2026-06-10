@@ -14,7 +14,12 @@
       "PowerShell(python -c \"from PIL import Image; print\\('Pillow OK'\\); img = Image.new\\('RGB',\\(10,10\\)\\); img.save\\('C:/tmp_test.webp'\\); print\\('WebP write OK'\\)\" 2>&1)",
       "PowerShell(python -c \"import PIL; print\\('Pillow version:', PIL.__version__\\)\" 2>&1)",
       "PowerShell(Get-ChildItem \"C:\\\\Users\\\\astgh\\\\Dropbox\\\\CSIE\\\\Grants\\\\Integration\\\\Travel\\\\Korea 2026\\\\Workshop\\\\poster_exports\\\\\" | Where-Object { $_.Extension -in @\\('.webp','.apng'\\) } | Select-Object Name, @{N='KB';E={[math]::Round\\($_.Length/1KB\\)}})",
-      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\astgh\\\\Dropbox\\\\CSIE\\\\Grants\\\\Integration\\\\Travel\\\\Korea 2026\\\\Workshop\\\\poster_exports\\\\\" | Select-Object Name, @{N='KB';E={[math]::Round\\($_.Length/1KB\\)}})"
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\astgh\\\\Dropbox\\\\CSIE\\\\Grants\\\\Integration\\\\Travel\\\\Korea 2026\\\\Workshop\\\\poster_exports\\\\\" | Select-Object Name, @{N='KB';E={[math]::Round\\($_.Length/1KB\\)}})",
+      "Bash(netstat -ano)",
+      "Bash(node *)",
+      "PowerShell(node serve.mjs)",
+      "PowerShell(Start-Sleep -Seconds 2; node screenshot.mjs http://localhost:3000/index.html#schedule schedule)",
+      "PowerShell(Get-Command *)"
     ]
   }
 }
