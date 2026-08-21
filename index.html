@@ -1150,7 +1150,7 @@
     <ul class="topics-list reveal">
       <li>System-level formulations of safety in autonomous systems operating under uncertainty</li>
       <li>Safety-critical control design and analysis, including robust, stochastic, and distributionally robust methods</li>
-      <li>Integration of learning-enabled and data-driven components with formal or control-theoretic safety guarantees</li>
+      <li>Integration of learning-enabled and data-driven components with formal or control-theoretic safety guarantees, including verification, certification, and regulatory/legal compliance</li>
       <li>Distributional and uncertainty-aware approaches to planning, estimation, and control</li>
       <li>Safety in distributed, decentralized, networked, and multi-agent systems</li>
       <li>Algorithmic and computational considerations, including scalability, robustness, and deployment</li>
@@ -1222,10 +1222,11 @@
               <span class="sched-talk-speaker">Navid Azizan</span>
               <span class="sched-talk-title">Towards Safe and Efficient AI-Enabled Autonomy</span>
             </div>            
-            <div class="sched-talk" data-speaker="Astghik Hakobyan" data-affil="National Polytechnic University of Armenia · CSIE" data-photo="assets/photos/Astghik_Hakobyan.jpg" data-talk="Distributionally Robust Planning with L₁ Adaptive Control" data-abstract="Safe operation of autonomous systems requires robustness to both model uncertainty and uncertainty in the environment. We propose DRP-L1AC, a hierarchical framework for stochastic nonlinear systems that integrates distributionally robust model predictive control (DR-MPC) with L₁-adaptive control. The key idea is to use the L₁-adaptive controller's online distributional certificates that bound the Wasserstein distance between nominal and true state distributions, thereby certifying the ambiguity sets used for planning without requiring distribution samples. Environmental uncertainty is captured via data-driven ambiguity sets constructed from finite samples. These are incorporated into a DR-MPC planner enforcing distributionally robust chance constraints over a receding horizon. Using Wasserstein duality, the resulting problem admits tractable reformulations and a sample-based implementation. We show theoretically and via numerical experimentation that our framework ensures certifiable safety in the presence of simultaneous system and environmental uncertainties.">
+            <div class="sched-talk" data-speaker="Astghik Hakobyan" data-affil="American University of Armenia · National Polytechnic University of Armenia" data-photo="assets/photos/Astghik_Hakobyan.jpg" data-talk="Safety-Critical Decision-Making Under Uncertainty: A Distributionally Robust Perspective" data-abstract=" Ensuring safety in autonomous systems under uncertainty remains a central challenge, especially in real-time and large-scale settings. This talk presents distributionally robust approaches for safety-critical decision-making when model, disturbance, sensor, and environmental uncertainty distributions are unknown, learned from limited data, or only partially characterized.
+Using risk measures and tools from distributionally robust optimization, the talk highlights methods that balance safety, performance, and computational tractability. Applications include risk-aware motion planning, sampling-based control for single-agent robotic systems, distributed control strategies for multi-agent systems, and distributionally robust state estimation.">
               <span class="sched-talk-time">12:00–12:40</span>
               <span class="sched-talk-speaker">Astghik Hakobyan</span>
-              <span class="sched-talk-title">Distributionally Robust Planning with L₁ Adaptive Control</span>
+              <span class="sched-talk-title">Safety-Critical Decision-Making Under Uncertainty: A Distributionally Robust Perspective</span>
             </div>
           </div>
         </div>
@@ -1284,12 +1285,12 @@
         <div class="sched-dot"></div>
         <div class="sched-body">
           <span class="sched-tag tag-session">Session 4</span>
-          <div class="sched-name">Compositional &amp; Networked Systems</div>
+          <div class="sched-name">Rules &amp; Safe Mobility</div>
           <div class="sched-talks">
             <div class="sched-talk" data-speaker="Gioele Zardini" data-affil="Massachusetts Institute of Technology" data-photo="assets/photos/Gioele_Zardini.png" data-talk="It Is Legal to Break the Law: Auditable Autonomy under Incomplete Regulation, from Driving to the Open Sea" data-abstract="Autonomous systems are held to requirements, including safety, liability, rule compliance, comfort, performance, that are numerous, vague, and mutually conflicting. Worse, the law that governs them is deliberately incomplete: it declares which duties dominate, but not which duty yields when two of them collide. Today that gap is closed by an engineer tuning a weight vector, which no regulator can audit and no operator can edit. This talk presents a systematic alternative: a framework that turns written regulation into a formal specification, derives from it how agents interact when each follows its own, and guarantees that private objectives can refine the law but never buy their way out of it. Regulatory amendments then propagate to admissible behavior automatically, and violations come with a certificate that they were forced. I instantiate the framework on urban driving and on collision avoidance at sea under the COLREGs, a treaty from 1972 whose duties routinely conflict the moment three vessels meet. I close by arguing that safety composes only when every step from statute to fleet behavior preserves priority.">
               <span class="sched-talk-time">15:40–16:20</span>
               <span class="sched-talk-speaker">Gioele Zardini</span>
-              <span class="sched-talk-title">Compositional Design of Society-Critical Systems: From Autonomy to Future Mobility</span>
+              <span class="sched-talk-title">It Is Legal to Break the Law: Auditable Autonomy under Incomplete Regulation, from Driving to the Open Sea</span>
             </div>
             <div class="sched-talk" data-speaker="Karl H. Johansson" data-affil="KTH Royal Institute of Technology" data-photo="assets/photos/Karl_Johansson.jpg" data-talk="Safe Learning and Control of Mixed-Autonomy Traffic" data-abstract="Road infrastructure remains significantly underutilized in today's traffic systems. In mixed-autonomy environments, where connected and automated vehicles share the road with human-driven vehicles, there is substantial potential to improve efficiency, resilience, and sustainability. This talk presents advances in physics-informed machine learning for mixed-autonomy traffic, demonstrating hybrid modeling approaches that integrate traffic flow theory with data-driven learning to achieve robust, scalable, adaptive models capable of operating under dynamic and uncertain conditions, supporting proactive traffic control with formal safety guarantees.">
               <span class="sched-talk-time">16:20–17:00</span>
@@ -1466,8 +1467,8 @@
         data-name="Gioele Zardini"
         data-affil="Rudge (1948) and Nancy Allen Career Development Assistant Professor, MIT; PI in LIDS and CEE"
         data-photo="assets/photos/Gioele_Zardini.png"
-        data-talk="Compositional Design of Society-Critical Systems: From Autonomy to Future Mobility"
-        data-abstract="When designing complex systems, it is necessary to consider trade-offs across multiple abstraction levels and scales, and to study component-level design choices jointly. In the context of future mobility, the design of autonomous vehicles and the mobility systems they enable are tightly coupled. This talk presents a framework for the compositional co-design of complex sociotechnical systems, leveraging monotone co-design theory and tools from game theory. The framework is instantiated through case studies spanning city-level policy design and autonomous mobility-on-demand services, demonstrating how the proposed approach enables modularity, interoperability, and scalable system-level optimization."
+        data-talk="It Is Legal to Break the Law: Auditable Autonomy under Incomplete Regulation, from Driving to the Open Sea"
+        data-abstract="Autonomous systems are held to requirements, including safety, liability, rule compliance, comfort, performance, that are numerous, vague, and mutually conflicting. Worse, the law that governs them is deliberately incomplete: it declares which duties dominate, but not which duty yields when two of them collide. Today that gap is closed by an engineer tuning a weight vector, which no regulator can audit and no operator can edit. This talk presents a systematic alternative: a framework that turns written regulation into a formal specification, derives from it how agents interact when each follows its own, and guarantees that private objectives can refine the law but never buy their way out of it. Regulatory amendments then propagate to admissible behavior automatically, and violations come with a certificate that they were forced. I instantiate the framework on urban driving and on collision avoidance at sea under the COLREGs, a treaty from 1972 whose duties routinely conflict the moment three vessels meet. I close by arguing that safety composes only when every step from statute to fleet behavior preserves priority."
         data-bio="Gioele Zardini is the Rudge (1948) and Nancy Allen Assistant Professor at MIT, with appointments in LIDS and the Department of Civil and Environmental Engineering (CEE), and is an affiliate faculty of the Institute for Data, Systems and Society (IDSS). He received his Ph.D. in 2024 from ETH Zurich, where he also earned B.Sc. and M.Sc. degrees in Mechanical Engineering and Robotics, Systems and Control. Prior to MIT, he was a Postdoctoral Scholar at Stanford University and held visiting positions at nuTonomy Singapore (Aptiv/Motional), Stanford, and MIT. His honors include the ETH Medal, the 2025 DARPA Young Faculty Award, Best Paper awards at ITSC and the Applied Category Theory Conference, and research awards from DoE, MIT, AFOSR, SIDARA, and Amazon.">
         <div class="speaker-top">
           <div class="speaker-avatar"><img src="assets/photos/Gioele_Zardini.png" alt="Gioele Zardini"></div>
@@ -1485,7 +1486,7 @@
               Scholar
             </a>
           </div>
-          <div class="speaker-bio-snippet">Rudge (1948) and Nancy Allen Assistant Professor at MIT, PI in LIDS and CEE. Ph.D. from ETH Zurich (2024). ETH Medal recipient, 2025 DARPA Young Faculty Award. Research on compositional co-design of complex autonomous and sociotechnical systems.</div>
+          <div class="speaker-bio-snippet">Rudge (1948) and Nancy Allen Assistant Professor at MIT, PI in LIDS and CEE. Ph.D. from ETH Zurich (2024). ETH Medal recipient, 2025 DARPA Young Faculty Award. Research on formal, auditable frameworks for safety and regulatory compliance in autonomous systems.</div>
         </div>
       </div>
 
@@ -1588,7 +1589,7 @@ Her research focuses on control and optimization, motion planning, distributiona
           <div class="speaker-avatar"><img src="assets/photos/Astghik_Hakobyan.jpg" alt="Astghik Hakobyan"></div>
           <div class="speaker-info">
             <div class="speaker-name">Astghik Hakobyan</div>
-            <div class="speaker-affil">National Polytechnic University of Armenia · CSIE</div>
+            <div class="speaker-affil">American University of Armenia · National Polytechnic University of Armenia</div>
           </div>
         </div>
         <div class="speaker-divider"></div>
@@ -1600,7 +1601,7 @@ Her research focuses on control and optimization, motion planning, distributiona
               Scholar
             </a>
           </div>
-          <div class="speaker-bio-snippet">Researcher at Polytechnic University of Armenia and CSIE. Works on distributionally robust planning and L₁-adaptive control for certifiable safety under simultaneous model and environmental uncertainties.</div>
+          <div class="speaker-bio-snippet">Assistant Professor at the Zaven & Sonia Akian College of Science and Engineering, American University of Armenia; Head of the Intelligent Systems and Advanced Control Lab at the National Polytechnic University of Armenia. Ph.D. from Seoul National University. Research in distributionally robust and risk-aware decision-making for safe autonomous systems under uncertainty.</div>
         </div>
       </div>
 
@@ -1628,7 +1629,7 @@ Her research focuses on control and optimization, motion planning, distributiona
       <div class="organizer-card">
         <div class="org-photo"><img src="assets/photos/Astghik_Hakobyan.jpg" alt="Astghik Hakobyan"></div>
         <div class="org-name">Astghik Hakobyan</div>
-        <div class="org-affil">National Polytechnic University of Armenia<br>Center for Scientific Innovation and Education<br>Yerevan, Armenia</div>
+        <div class="org-affil">American University of Armenia<br>National Polytechnic University of Armenia<br>Yerevan, Armenia</div>
         <a href="https://scholar.google.com/citations?user=vtEfYXsAAAAJ" target="_blank" rel="noopener" class="scholar-link">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5h3.64C3.21 10.58 3 11.77 3 13a9 9 0 1 0 18 0c0-1.23-.21-2.42-.64-3.5H24z"/></svg>
           Google Scholar
