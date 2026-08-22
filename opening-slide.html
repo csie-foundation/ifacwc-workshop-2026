@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safety as a System Property — Opening Slide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #1A5FA8;
+    --gold-light: #2B7DD4;
+    --orange: #C04010;
+    --font-disp: 'Cormorant Garant', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'DM Mono', 'Fira Mono', monospace;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%;
+    height: 100%;
+  }
+  body {
+    font-family: var(--font-body);
+    background: #0A1628;
+    color: #E8EEF8;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── Grain overlay ─────────────────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.02;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(2rem, 6vw, 6.5rem);
+    overflow: hidden;
+  }
+  .right-group {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  #hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+  }
+  .slide-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 20% 30%, rgba(43, 125, 212, 0.16) 0%, transparent 65%),
+      radial-gradient(ellipse 55% 75% at 90% 75%, rgba(14, 116, 144, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 100% at 50% 100%, rgba(10, 22, 40, 0.7) 0%, transparent 55%);
+  }
+
+  /* ─── Main content column ───────────────────────────────── */
+  .content {
+    position: relative;
+    z-index: 2;
+    max-width: 66%;
+    opacity: 0;
+    animation: fadeUp 0.9s var(--ease-out) 0.15s forwards;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 1rem 0.4rem 0.55rem;
+    background: rgba(43, 125, 212, 0.15);
+    border: 1px solid rgba(43, 125, 212, 0.32);
+    border-radius: 100px;
+    margin-bottom: clamp(1.4rem, 2.2vw, 2rem);
+  }
+  .badge-dot {
+    width: 7px; height: 7px;
+    background: var(--gold-light);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--gold-light);
+  }
+  .badge-text {
+    font-size: clamp(0.75rem, 1vw, 0.9rem);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #7AAEE8;
+  }
+  h1.title {
+    font-family: var(--font-disp);
+    font-weight: 300;
+    font-size: clamp(3.2rem, 6.4vw, 6rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: #E8EEF8;
+    margin-bottom: clamp(0.9rem, 1.7vw, 1.3rem);
+  }
+  h1.title em {
+    font-style: italic;
+    color: #7AAEE8;
+  }
+  .subtitle {
+    font-family: var(--font-disp);
+    font-weight: 400;
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    color: #8AAAD4;
+    letter-spacing: 0.01em;
+    margin-bottom: clamp(2.4rem, 4vw, 3.6rem);
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(1.6rem, 3.4vw, 3.4rem);
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .meta-label {
+    font-size: clamp(0.68rem, 0.85vw, 0.8rem);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #7AAEE8;
+  }
+  .meta-value {
+    font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+    font-weight: 400;
+    color: #E8EEF8;
+  }
+
+  /* ─── QR panel ───────────────────────────────────────────── */
+  .divider {
+    position: relative;
+    z-index: 2;
+    width: 1px;
+    align-self: stretch;
+    margin: clamp(2.5rem, 6vw, 5rem) clamp(2.5rem, 5vw, 5rem);
+    background: linear-gradient(to bottom, transparent, rgba(43, 125, 212, 0.4) 20%, rgba(43, 125, 212, 0.4) 80%, transparent);
+    opacity: 0;
+    animation: fadeUp 0.9s var(--ease-out) 0.35s forwards;
+  }
+  .qr-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(1rem, 1.8vw, 1.4rem);
+    opacity: 0;
+    animation: fadeUp 0.9s var(--ease-out) 0.5s forwards;
+  }
+  .qr-eyebrow {
+    font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #7AAEE8;
+  }
+  .qr-card {
+    padding: clamp(1.1rem, 1.9vw, 1.6rem);
+    background: #F2F5FA;
+    border-radius: 16px;
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.25),
+      0 24px 70px rgba(43, 125, 212, 0.25),
+      0 0 0 1px rgba(43, 125, 212, 0.35);
+  }
+  .qr-card img {
+    display: block;
+    width: clamp(200px, 20vw, 300px);
+    height: clamp(200px, 20vw, 300px);
+  }
+  .qr-caption {
+    text-align: center;
+  }
+  .qr-caption-label {
+    font-size: clamp(0.68rem, 0.85vw, 0.8rem);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #7AAEE8;
+    margin-bottom: 0.35rem;
+  }
+  .qr-caption-url {
+    font-family: var(--font-mono);
+    font-size: clamp(0.68rem, 0.85vw, 0.82rem);
+    color: #C8DDF8;
+    letter-spacing: 0.01em;
+  }
+
+  /* ─── Footer logos ───────────────────────────────────────── */
+  .footer-logo {
+    position: absolute;
+    bottom: clamp(1.4rem, 2.6vw, 2.4rem);
+    right: clamp(2rem, 6vw, 6.5rem);
+    z-index: 2;
+    opacity: 0;
+    animation: fadeUp 0.9s var(--ease-out) 0.75s forwards;
+  }
+  .footer-logo img {
+    height: clamp(38px, 4.5vw, 58px);
+    width: auto;
+    filter: drop-shadow(0 4px 16px rgba(43, 125, 212, 0.25));
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    .slide { flex-direction: column; justify-content: center; gap: 2.5rem; padding: 2rem; }
+    .content { max-width: 100%; text-align: center; }
+    .badge, .meta { justify-content: center; }
+    .qr-panel { margin: 0 auto; }
+    .footer-logo { position: static; margin-top: 1rem; align-self: center; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="slide">
+    <canvas id="hero-canvas"></canvas>
+    <div class="slide-gradient"></div>
+
+    <div class="content">
+      <div class="badge">
+        <div class="badge-dot"></div>
+        <span class="badge-text">23rd IFAC World Congress 2026 · Busan, Korea</span>
+      </div>
+
+      <h1 class="title">
+        Safety as a<br>
+        <em>System Property</em>
+      </h1>
+      <p class="subtitle">From Control Design to Data-Driven Autonomy</p>
+
+      <div class="meta">
+        <div class="meta-item">
+          <span class="meta-label">Date</span>
+          <span class="meta-value">August 23, 2026</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Time</span>
+          <span class="meta-value">09:00 – 17:00</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Speakers</span>
+          <span class="meta-value">8 Invited Talks</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-group">
+    <div class="divider"></div>
+
+    <div class="qr-panel">
+      <span class="qr-eyebrow">Join the Workshop</span>
+      <div class="qr-card">
+        <img src="data:image/png;base64,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" alt="QR code linking to the workshop website">
+      </div>
+      <div class="qr-caption">
+        <div class="qr-caption-label">Scan for Program &amp; Details</div>
+        <div class="qr-caption-url">csie-foundation.github.io/ifacwc-workshop-2026</div>
+      </div>
+    </div>
+    </div>
+
+    <div class="footer-logo">
+      <img src="assets/IFAC_2026_Logo_gif.gif" alt="IFAC 2026 Busan">
+    </div>
+  </div>
+
+  <script>
+    /* ── Hero Canvas — Autonomy Pipeline Diagram (mirrors index.html) ── */
+    (function() {
+      const canvas = document.getElementById('hero-canvas');
+      const ctx = canvas.getContext('2d');
+      let W, H, nodes, edges, layerXs;
+      const GOLD = 'rgba(43, 125, 212,';
+      const TEAL = 'rgba(14, 116, 144,';
+
+      function resize() {
+        W = canvas.width = canvas.offsetWidth;
+        H = canvas.height = canvas.offsetHeight;
+        initGraph();
+      }
+
+      function initGraph() {
+        nodes = [];
+        edges = [];
+
+        const layers = [
+          { x: 0.10, color: TEAL, count: 6 },
+          { x: 0.32, color: GOLD, count: 7 },
+          { x: 0.55, color: TEAL, count: 6 },
+          { x: 0.78, color: GOLD, count: 7 },
+          { x: 0.95, color: TEAL, count: 5 },
+        ];
+        layerXs = layers.map(l => l.x);
+
+        layers.forEach((layer, li) => {
+          for (let i = 0; i < layer.count; i++) {
+            const yFrac = 0.08 + (i / (layer.count - 1)) * 0.84;
+            nodes.push({
+              x: layer.x * W + (Math.random() - 0.5) * W * 0.06,
+              y: yFrac * H + (Math.random() - 0.5) * H * 0.04,
+              vx: (Math.random() - 0.5) * 0.18,
+              vy: (Math.random() - 0.5) * 0.18,
+              r: 3 + Math.random() * 2.5,
+              color: layer.color,
+              layer: li,
+              phase: Math.random() * Math.PI * 2,
+            });
+          }
+        });
+
+        const byLayer = layers.map((_, li) => nodes.filter(n => n.layer === li));
+
+        for (let li = 0; li < byLayer.length - 1; li++) {
+          byLayer[li].forEach(a => {
+            const targets = byLayer[li + 1].slice().sort(() => Math.random() - 0.5).slice(0, 2);
+            targets.forEach(b => edges.push({ a, b, phase: Math.random() * Math.PI * 2, speed: 0.4 + Math.random() * 0.6 }));
+          });
+        }
+        byLayer.forEach(layer => {
+          for (let i = 0; i < layer.length - 1; i++) {
+            if (Math.random() > 0.4) {
+              edges.push({ a: layer[i], b: layer[i + 1], phase: Math.random() * Math.PI * 2, speed: 0.3, intra: true });
+            }
+          }
+        });
+      }
+
+      let t = 0;
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        t += 0.005;
+
+        ctx.strokeStyle = 'rgba(43, 125, 212, 0.1)';
+        ctx.lineWidth = 1;
+        const gs = 60;
+        for (let x = 0; x < W; x += gs) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+        }
+        for (let y = 0; y < H; y += gs) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+        }
+
+        edges.forEach(e => {
+          const progress = ((t * e.speed + e.phase) % (Math.PI * 2)) / (Math.PI * 2);
+          const alpha = e.intra ? 0.08 : 0.12;
+          ctx.strokeStyle = e.intra ? `${TEAL}${alpha})` : `${GOLD}${alpha})`;
+          ctx.lineWidth = e.intra ? 0.5 : 0.8;
+          ctx.setLineDash([]);
+          ctx.beginPath();
+          ctx.moveTo(e.a.x, e.a.y);
+          ctx.lineTo(e.b.x, e.b.y);
+          ctx.stroke();
+
+          if (!e.intra) {
+            const px = e.a.x + (e.b.x - e.a.x) * progress;
+            const py = e.a.y + (e.b.y - e.a.y) * progress;
+            const grad = ctx.createRadialGradient(px, py, 0, px, py, 6);
+            grad.addColorStop(0, `${GOLD}0.8)`);
+            grad.addColorStop(1, `${GOLD}0)`);
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(px, py, 6, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+
+        nodes.forEach(n => {
+          const pulse = Math.sin(t * 1.2 + n.phase) * 0.4 + 0.6;
+          const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 4);
+          glow.addColorStop(0, `${n.color}${0.25 * pulse})`);
+          glow.addColorStop(1, `${n.color}0)`);
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r * 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = `${n.color}${0.7 + 0.3 * pulse})`;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          n.x += n.vx; n.y += n.vy;
+          const cx = layerXs[n.layer];
+          if (Math.abs(n.x - cx * W) > W * 0.06) n.vx *= -1;
+          if (n.y < H * 0.05 || n.y > H * 0.95) n.vy *= -1;
+        });
+
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      draw();
+    })();
+  </script>
+</body>
+</html>
